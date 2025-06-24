@@ -1,0 +1,53 @@
+---
+interface Props {
+    title?: string; 
+    description?: string;
+    image?: string;
+}
+
+const {title = 'Home Page - Victor Romero'} = Astro.props;
+const description = "I'm a software developer";
+const url = "https://www.vicctor-romero.com";
+
+
+
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content={Astro.generator}>
+    <link rel="canonical" href={url} />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/src/styles/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <title>{title}</title>
+</head>
+<body class="bg-gray-800">
+
+    <main>
+        <slot />        
+    </main>
+</body>
+</html>
+
+<style is:global>
+    @keyframes bump {
+      0% {
+        opacity: 0;
+        transform: scale(1) translateX(200px);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+      }
+    }
+  </style>

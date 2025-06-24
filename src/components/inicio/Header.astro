@@ -1,0 +1,21 @@
+---
+// src/components/Header.astro
+---
+<header class="absolute top-0 left-0 w-full z-10 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="/" class="text-xl font-bold text-white">
+      Victor Romero
+    </a>
+    <nav class="hidden md:flex items-center space-x-6">
+      <a href="#proyectos" class="text-gray-300 hover:text-white transition-colors">Projects</a>
+      <a href="#sobre-mi" class="text-gray-300 hover:text-white transition-colors">About me</a>
+      <a href="#contacto" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+    </nav>
+    <a 
+      href="mailto:tu.email@example.com"
+      class="hidden md:inline-block bg-white text-black font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+    >
+      Contact me
+    </a>
+  </div>
+</header>
