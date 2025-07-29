@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from '../components/inicio/Header.astro'
 import MainLayout from "../layouts/MainLayout.astro";
+import CuboAnimado from '../components/CuboAnimated.tsx';
 ---
 
 <MainLayout title="Projects - Victor Romero">
@@ -11,96 +12,85 @@ import MainLayout from "../layouts/MainLayout.astro";
     <section class="relative pt-24 pb-16">
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
+          <!-- Header Section -->
           <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6" data-i18n="projects.title">
               My Projects
             </h1>
             <div class="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
-            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto" data-i18n="projects.subtitle">
               A showcase of my recent work and creative projects that demonstrate my skills and passion for development.
             </p>
           </div>
 
-          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Project 1 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
-              <div class="h-48 bg-gradient-to-br from-blue-600 to-blue-800 relative">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="text-white text-2xl font-bold">Project 1</span>
+          <!-- Featured Project: Rubik's Cube 3D -->
+          <div class="max-w-4xl mx-auto">
+            <div class="bg-gray-800 rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
+              
+              <!-- Project Preview with Live Cube -->
+              <div class="grid lg:grid-cols-2 gap-0">
+                <!-- Left: Live Demo -->
+                <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-8 flex items-center justify-center min-h-[400px]">
+                  <div class="w-full h-80">
+                    <CuboAnimado client:load />
+                  </div>
                 </div>
-              </div>
-              <div class="p-6">
-                <h3 class="text-xl font-bold text-white mb-2">Awesome Project</h3>
-                <p class="text-gray-400 mb-4">
-                  Description of your amazing project goes here. Keep it concise but descriptive.
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">React</span>
-                  <span class="px-3 py-1 bg-green-900 text-green-300 rounded-full text-sm">Node.js</span>
-                </div>
-                <div class="flex space-x-4">
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fab fa-github"></i> Code
-                  </a>
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fas fa-external-link-alt"></i> Live Demo
-                  </a>
+                
+                <!-- Right: Project Info -->
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                  <div class="mb-4">
+                    <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm font-medium" data-i18n="projects.featured">
+                      Featured Project
+                    </span>
+                  </div>
+                  
+                  <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4" data-i18n="projects.cube.title">
+                    3D Rubik's Cube
+                  </h2>
+                  
+                  <p class="text-gray-400 text-lg mb-6 leading-relaxed" data-i18n="projects.cube.description">
+                    Interactive 3D Rubik's cube with realistic animations, smooth rotations, and intelligent auto-scrambling. Built with React Three Fiber for optimal performance.
+                  </p>
+                  
+                  <!-- Tech Stack -->
+                  <div class="flex flex-wrap gap-2 mb-8">
+                    <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">React</span>
+                    <span class="px-3 py-1 bg-purple-900 text-purple-300 rounded-full text-sm">Three.js</span>
+                    <span class="px-3 py-1 bg-green-900 text-green-300 rounded-full text-sm">TypeScript</span>
+                    <span class="px-3 py-1 bg-orange-900 text-orange-300 rounded-full text-sm">Astro</span>
+                  </div>
+                  
+                  <!-- Action Buttons -->
+                  <div class="flex flex-col sm:flex-row gap-4">
+                    <a 
+                      href="/projects/rubiks-cube-3d" 
+                      class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                      data-i18n="projects.cube.view_details"
+                    >
+                      View Project Details
+                    </a>
+                    <a 
+                      href="https://github.com/vicctor-romero/rubiks-cube-3d" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="border-2 border-gray-600 hover:border-blue-500 text-gray-300 hover:text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 text-center flex items-center justify-center gap-2"
+                    >
+                      <i class="fab fa-github"></i>
+                      <span data-i18n="projects.view_code">View Code</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <!-- Project 2 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
-              <div class="h-48 bg-gradient-to-br from-purple-600 to-purple-800 relative">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="text-white text-2xl font-bold">Project 2</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <h3 class="text-xl font-bold text-white mb-2">Cool Application</h3>
-                <p class="text-gray-400 mb-4">
-                  Another great project showcasing different skills and technologies.
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span class="px-3 py-1 bg-purple-900 text-purple-300 rounded-full text-sm">Vue.js</span>
-                  <span class="px-3 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm">MongoDB</span>
-                </div>
-                <div class="flex space-x-4">
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fab fa-github"></i> Code
-                  </a>
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fas fa-external-link-alt"></i> Live Demo
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Project 3 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
-              <div class="h-48 bg-gradient-to-br from-red-600 to-red-800 relative">
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="text-white text-2xl font-bold">Project 3</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <h3 class="text-xl font-bold text-white mb-2">Web Experience</h3>
-                <p class="text-gray-400 mb-4">
-                  Interactive web experience with modern animations and effects.
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span class="px-3 py-1 bg-red-900 text-red-300 rounded-full text-sm">Three.js</span>
-                  <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">WebGL</span>
-                </div>
-                <div class="flex space-x-4">
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fab fa-github"></i> Code
-                  </a>
-                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
-                    <i class="fas fa-external-link-alt"></i> Live Demo
-                  </a>
-                </div>
-              </div>
+            
+            <!-- Coming Soon Section -->
+            <div class="text-center mt-16">
+              <h3 class="text-2xl font-bold text-white mb-4" data-i18n="projects.coming_soon.title">
+                More Projects Coming Soon
+              </h3>
+              <p class="text-gray-400 max-w-2xl mx-auto" data-i18n="projects.coming_soon.description">
+                I'm constantly working on new and exciting projects. Stay tuned for more innovative web applications and creative solutions.
+              </p>
             </div>
           </div>
         </div>
