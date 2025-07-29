@@ -164,7 +164,7 @@ function RubiksCube() {
 // --- Componente de exportación (sin cambios) ---
 export default function CuboAnimado() {
   return (
-    <Canvas camera={{ position: [5, 5, 7], fov: 50 }}>
+    <Canvas camera={{ position: [4, 4, 5], fov: 42 }}>
       <ambientLight intensity={5} />
       <RubiksCube />
       <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={0.5} />
