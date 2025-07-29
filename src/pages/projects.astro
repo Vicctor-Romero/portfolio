@@ -1,0 +1,110 @@
+---
+import "../styles/global.css";
+import Header from '../components/inicio/Header.astro'
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout title="Projects - Victor Romero">
+  <main class="w-full min-h-screen bg-gray-900">
+    <Header />
+    
+    <section class="relative pt-24 pb-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+              My Projects
+            </h1>
+            <div class="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+              A showcase of my recent work and creative projects that demonstrate my skills and passion for development.
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
+              <div class="h-48 bg-gradient-to-br from-blue-600 to-blue-800 relative">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-white text-2xl font-bold">Project 1</span>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-white mb-2">Awesome Project</h3>
+                <p class="text-gray-400 mb-4">
+                  Description of your amazing project goes here. Keep it concise but descriptive.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">React</span>
+                  <span class="px-3 py-1 bg-green-900 text-green-300 rounded-full text-sm">Node.js</span>
+                </div>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fab fa-github"></i> Code
+                  </a>
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
+              <div class="h-48 bg-gradient-to-br from-purple-600 to-purple-800 relative">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-white text-2xl font-bold">Project 2</span>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-white mb-2">Cool Application</h3>
+                <p class="text-gray-400 mb-4">
+                  Another great project showcasing different skills and technologies.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <span class="px-3 py-1 bg-purple-900 text-purple-300 rounded-full text-sm">Vue.js</span>
+                  <span class="px-3 py-1 bg-yellow-900 text-yellow-300 rounded-full text-sm">MongoDB</span>
+                </div>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fab fa-github"></i> Code
+                  </a>
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="bg-gray-800 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300">
+              <div class="h-48 bg-gradient-to-br from-red-600 to-red-800 relative">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-white text-2xl font-bold">Project 3</span>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold text-white mb-2">Web Experience</h3>
+                <p class="text-gray-400 mb-4">
+                  Interactive web experience with modern animations and effects.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <span class="px-3 py-1 bg-red-900 text-red-300 rounded-full text-sm">Three.js</span>
+                  <span class="px-3 py-1 bg-blue-900 text-blue-300 rounded-full text-sm">WebGL</span>
+                </div>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fab fa-github"></i> Code
+                  </a>
+                  <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</MainLayout> 
