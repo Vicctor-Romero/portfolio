@@ -1,4 +1,6 @@
 ---
+import Footer from '../components/Footer.astro';
+
 interface Props {
     title?: string; 
     description?: string;
@@ -21,6 +23,11 @@ const url = "https://www.vicctor-romero.com";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content={Astro.generator}>
     <link rel="canonical" href={url} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dqkckcvl0/image/upload/v1753825897/VR_afn6h2.png" />
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dqkckcvl0/image/upload/v1753825897/VR_afn6h2.png" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="/src/styles/global.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -32,6 +39,8 @@ const url = "https://www.vicctor-romero.com";
     <main>
         <slot />        
     </main>
+    
+    <Footer />
 </body>
 </html>
 
