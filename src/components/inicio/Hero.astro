@@ -2,26 +2,49 @@
 // src/components/Hero.astro
 import CuboAnimado from '../CuboAnimated.tsx';
 ---
-<div class="container mx-auto h-full px-4">
-  <div class="grid md:grid-cols-2 gap-8 items-center h-full">
-    <div class="text-center md:text-left">
-      <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight">
-        Hello, I'm Victor
+<div class="container mx-auto max-w-6xl px-4">
+  <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
+    <!-- Text Content -->
+    <div class="text-center lg:text-left order-2 lg:order-1">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6">
+        <span data-i18n="hero.greeting">Hello, I'm</span> 
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+          Victor
+        </span>
       </h1>
-      <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-md mx-auto md:mx-0">
-        I'm a creative software developer focused on building seamless, interactive digital experiences that leave a lasting impression.
+      <p class="text-lg sm:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed" data-i18n="hero.description">
+        In a digital world filled with generic solutions, I offer a different approach. I dedicate myself to understanding your vision and values to build a project that authentically represents you. I don't just deliver code; I offer a close partnership to create a digital tool that reflects the essence of your brand and what you offer to the world. Your project, personally crafted for you.
       </p>
-      <div class="mt-8 flex justify-center md:justify-start space-x-4">
-        <a href="#proyectos" class="bg-white text-black font-semibold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors">
-          My projects
+      
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto lg:mx-0">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-white">3+</div>
+          <div class="text-sm text-gray-400" data-i18n="hero.stats.years">Years Exp</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-white">10+</div>
+          <div class="text-sm text-gray-400" data-i18n="hero.stats.projects">Projects</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-white">100%</div>
+          <div class="text-sm text-gray-400" data-i18n="hero.stats.satisfaction">Satisfaction</div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+        <a href="/projects" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1" data-i18n="hero.cta.projects">
+          View My Projects
         </a>
-        <a href="https://github.com/tu-usuario" target="_blank" class="border border-gray-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
-          GitHub
+        <a href="/contact" class="border-2 border-gray-600 hover:border-blue-500 text-white font-semibold px-8 py-4 rounded-lg hover:bg-gray-800 transition-all duration-300 text-center" data-i18n="hero.cta.contact">
+          Let's Talk
         </a>
       </div>
     </div>
 
-    <div class="w-full h-64 md:h-full min-h-[300px]">
+    <!-- 3D Cube -->
+    <div class="w-full h-80 lg:h-[500px] order-1 lg:order-2">
       <CuboAnimado client:load />
     </div>
   </div>

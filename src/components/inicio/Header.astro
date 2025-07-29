@@ -1,21 +1,263 @@
 ---
 // src/components/Header.astro
 ---
-<header class="absolute top-0 left-0 w-full z-10 p-4">
+<header class="absolute top-0 left-0 w-full z-50 p-4">
   <div class="container mx-auto flex justify-between items-center">
-    <a href="/" class="text-xl font-bold text-white">
-      Victor Romero
+
+    <a href="/" class="text-xl font-bold flex items-center gap-2 text-white hover:text-blue-400 transition-colors">
+      <img 
+      src="https://res.cloudinary.com/dqkckcvl0/image/upload/v1753825897/VR_afn6h2.png" 
+      alt="Victor Romero Logo" 
+      class="w-10 h-10 rounded-lg"
+    />
+      <span class=" text-xl font-bold text-white hover:text-blue-400 transition-colors">Victor Romero</span>
     </a>
+    
+    <!-- Desktop Navigation -->
     <nav class="hidden md:flex items-center space-x-6">
-      <a href="#proyectos" class="text-gray-300 hover:text-white transition-colors">Projects</a>
-      <a href="#sobre-mi" class="text-gray-300 hover:text-white transition-colors">About me</a>
-      <a href="#contacto" class="text-gray-300 hover:text-white transition-colors">Contact</a>
+      <a href="/projects" class="text-gray-300 hover:text-white transition-colors font-medium" data-i18n="nav.projects">Projects</a>
+      <a href="/about" class="text-gray-300 hover:text-white transition-colors font-medium" data-i18n="nav.about">About</a>
+      <a href="/contact" class="text-gray-300 hover:text-white transition-colors font-medium" data-i18n="nav.contact">Contact</a>
     </nav>
-    <a 
-      href="mailto:tu.email@example.com"
-      class="hidden md:inline-block bg-white text-black font-semibold px-5 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+    
+    <!-- Desktop CTA & Language Toggle -->
+    <div class="hidden lg:flex items-center space-x-3">
+      <!-- Round Language Toggle -->
+      <button 
+        id="language-toggle"
+        class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-300 hover:text-white transition-colors group"
+        aria-label="Toggle language"
+      >
+        <span id="current-language" class="text-sm font-medium">EN</span>
+      </button>
+      
+      <!-- CTA Button -->
+      <a 
+        href="/contact"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors"
+        data-i18n="nav.cta"
+      >
+        Get In Touch
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button 
+      id="mobile-menu-button"
+      class="md:hidden text-white hover:text-blue-400 transition-colors"
+      aria-label="Toggle mobile menu"
     >
-      Contact me
-    </a>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div 
+    id="mobile-menu" 
+    class="md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-gray-800 transform -translate-y-full opacity-0 invisible transition-all duration-300"
+  >
+    <nav class="container mx-auto py-6 px-4">
+      <div class="flex flex-col space-y-4">
+        <a href="/projects" class="text-gray-300 hover:text-white transition-colors font-medium py-2 border-b border-gray-800" data-i18n="nav.projects">Projects</a>
+        <a href="/about" class="text-gray-300 hover:text-white transition-colors font-medium py-2 border-b border-gray-800" data-i18n="nav.about">About</a>
+        <a href="/contact" class="text-gray-300 hover:text-white transition-colors font-medium py-2 border-b border-gray-800" data-i18n="nav.contact">Contact</a>
+        
+        <!-- Mobile Language Toggle -->
+        <div class="flex items-center justify-center py-2 border-b border-gray-800">
+          <button 
+            id="mobile-language-toggle"
+            class="w-10 h-10 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-gray-300 hover:text-white transition-colors"
+            aria-label="Toggle language"
+          >
+            <span id="mobile-current-language" class="text-sm font-medium">EN</span>
+          </button>
+        </div>
+        
+        <a 
+          href="/contact" 
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition-colors text-center mt-4"
+          data-i18n="nav.cta"
+        >
+          Get In Touch
+        </a>
+      </div>
+    </nav>
   </div>
 </header>
+
+<script>
+  // Translation system
+  const translations: {[key: string]: {[key: string]: string}} = {
+    en: {
+      'nav.projects': 'Projects',
+      'nav.about': 'About',
+      'nav.contact': 'Contact',
+      'nav.cta': 'Get In Touch',
+      'hero.greeting': "Hello, I'm",
+      'hero.description': "I build robust and scalable web applications, tailored to your specific needs. I achieve this by collaborating closely with you to understand your goals and build a digital solution that not only performs perfectly but also faithfully represents your project's unique identity.",
+      'hero.stats.years': 'Years Exp',
+      'hero.stats.projects': 'Projects',
+      'hero.stats.satisfaction': 'Satisfaction',
+      'hero.cta.projects': 'View My Projects',
+      'hero.cta.contact': "Let's Talk",
+      'footer.tagline': 'Creative Software Developer',
+      'footer.description': 'Building innovative digital experiences with modern technologies. Let\'s create something amazing together.',
+      'footer.navigation': 'Navigation',
+      'footer.nav.home': 'Home',
+      'footer.nav.about': 'About',
+      'footer.nav.projects': 'Projects',
+      'footer.nav.contact': 'Contact',
+      'footer.contact.title': 'Get In Touch',
+      'footer.contact.location': 'Available for remote work',
+      'footer.contact.availability': 'Mon - Fri, 9AM - 6PM',
+      'footer.copyright.text': '© 2025 Victor Romero. All rights reserved.',
+      'footer.made_with': 'Made with'
+    },
+    es: {
+      'nav.projects': 'Proyectos',
+      'nav.about': 'Acerca de',
+      'nav.contact': 'Contacto',
+      'nav.cta': 'Contáctame',
+      'hero.greeting': 'Hola, soy',
+      'hero.description': 'Creo aplicaciones web robustas y escalables, diseñadas a la medida de tus necesidades. Para lograrlo, colaboro estrechamente contigo para entender tus metas y construir una solución digital que no solo funcione a la perfección, sino que represente fielmente la identidad única de tu proyecto.',
+      'hero.stats.years': 'Años Exp',
+      'hero.stats.projects': 'Proyectos',
+      'hero.stats.satisfaction': 'Satisfacción',
+      'hero.cta.projects': 'Ver Mis Proyectos',
+      'hero.cta.contact': 'Hablemos',
+      'footer.tagline': 'Desarrollador de Software Creativo',
+      'footer.description': 'Creando experiencias digitales innovadoras con tecnologías modernas. Vamos a crear algo increíble juntos.',
+      'footer.navigation': 'Navegación',
+      'footer.nav.home': 'Inicio',
+      'footer.nav.about': 'Acerca de',
+      'footer.nav.projects': 'Proyectos',
+      'footer.nav.contact': 'Contacto',
+      'footer.contact.title': 'Contáctame',
+      'footer.contact.location': 'Disponible para trabajo remoto',
+      'footer.contact.availability': 'Lun - Vie, 9AM - 6PM',
+      'footer.copyright.text': '© 2025 Victor Romero. Todos los derechos reservados.',
+      'footer.made_with': 'Hecho con'
+    }
+  };
+
+  let currentLanguage = 'en'; // Default language
+
+  // Initialize language system
+  function initLanguage() {
+    // Get saved language from localStorage
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage && translations[savedLanguage]) {
+      currentLanguage = savedLanguage;
+    }
+    
+    // Apply translations and update UI
+    applyTranslations();
+    updateLanguageUI();
+  }
+
+  // Apply translations to all elements with data-i18n attribute
+  function applyTranslations() {
+    const currentLang = translations[currentLanguage];
+    if (!currentLang) return;
+    
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (key && currentLang[key]) {
+        element.textContent = currentLang[key];
+      }
+    });
+  }
+
+  // Update language toggle buttons
+  function updateLanguageUI() {
+    const langCode = currentLanguage.toUpperCase();
+    const currentLangEl = document.getElementById('current-language');
+    const mobileLangEl = document.getElementById('mobile-current-language');
+    
+    if (currentLangEl) currentLangEl.textContent = langCode;
+    if (mobileLangEl) mobileLangEl.textContent = langCode;
+  }
+
+  // Toggle language
+  function toggleLanguage() {
+    currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+    localStorage.setItem('language', currentLanguage);
+    applyTranslations();
+    updateLanguageUI();
+  }
+
+  // Mobile menu functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize language system
+    initLanguage();
+
+    // Language toggle event listeners
+    const languageToggle = document.getElementById('language-toggle');
+    const mobileLanguageToggle = document.getElementById('mobile-language-toggle');
+    
+    languageToggle?.addEventListener('click', toggleLanguage);
+    mobileLanguageToggle?.addEventListener('click', toggleLanguage);
+
+    // Mobile menu functionality
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = mobileMenuButton?.querySelector('svg path');
+    
+    let isMenuOpen = false;
+
+    mobileMenuButton?.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        // Open menu
+        mobileMenu?.classList.remove('-translate-y-full', 'opacity-0', 'invisible');
+        mobileMenu?.classList.add('translate-y-0', 'opacity-100', 'visible');
+        
+        // Change icon to X
+        if (menuIcon) {
+          menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        }
+      } else {
+        // Close menu
+        mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'invisible');
+        mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'visible');
+        
+        // Change icon back to hamburger
+        if (menuIcon) {
+          menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+        }
+      }
+    });
+
+    // Close menu when clicking on a link
+    const mobileMenuLinks = mobileMenu?.querySelectorAll('a');
+    mobileMenuLinks?.forEach(link => {
+      link.addEventListener('click', () => {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'invisible');
+        mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'visible');
+        
+        // Reset icon
+        if (menuIcon) {
+          menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+        }
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (isMenuOpen && !mobileMenuButton?.contains(e.target as Node) && !mobileMenu?.contains(e.target as Node)) {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('-translate-y-full', 'opacity-0', 'invisible');
+        mobileMenu?.classList.remove('translate-y-0', 'opacity-100', 'visible');
+        
+        // Reset icon
+        if (menuIcon) {
+          menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+        }
+      }
+    });
+  });
+</script>
