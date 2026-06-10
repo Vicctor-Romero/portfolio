@@ -1,51 +1,238 @@
 ---
-// src/components/Hero.astro
-import CuboAnimado from '../CuboAnimated.tsx';
+import CuboAnimated from "../CuboAnimated.tsx";
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+function getLocalizedPath(path: string) {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (lang === "es") return `/es${cleanPath}`;
+  return cleanPath;
+}
+
+const kickerParts = t("home.kicker").split(" · ");
+const stack = [
+  "REACT",
+  "NEXT.JS",
+  "NESTJS",
+  "REACT NATIVE",
+  "POSTGRESQL",
+  "TYPESCRIPT",
+];
 ---
-<div class="container mx-auto max-w-6xl px-4">
-  <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
-    <!-- Text Content -->
-    <div class="text-center lg:text-left order-2 lg:order-1">
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6">
-        <span data-i18n="hero.greeting">Hello, I'm</span> 
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-          Victor
-        </span>
-      </h1>
-      <p class="text-lg sm:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed" data-i18n="hero.description">
-        In a digital world filled with generic solutions, I offer a different approach. I dedicate myself to understanding your vision and values to build a project that authentically represents you. I don't just deliver code; I offer a close partnership to create a digital tool that reflects the essence of your brand and what you offer to the world. Your project, personally crafted for you.
-      </p>
-      
-      <!-- Stats -->
-      <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto lg:mx-0">
-        <div class="text-center">
-          <div class="text-2xl font-bold text-white">3+</div>
-          <div class="text-sm text-gray-400" data-i18n="hero.stats.years">Years Exp</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-white">10+</div>
-          <div class="text-sm text-gray-400" data-i18n="hero.stats.projects">Projects</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-white">100%</div>
-          <div class="text-sm text-gray-400" data-i18n="hero.stats.satisfaction">Satisfaction</div>
-        </div>
-      </div>
 
-      <!-- CTA Buttons -->
-      <div class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-        <a href="/projects" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1" data-i18n="hero.cta.projects">
-          View My Projects
-        </a>
-        <a href="/contact" class="border-2 border-gray-600 hover:border-blue-500 text-white font-semibold px-8 py-4 rounded-lg hover:bg-gray-800 transition-all duration-300 text-center" data-i18n="hero.cta.contact">
-          Let's Talk
-        </a>
-      </div>
+<main class="hero">
+  <div class="left">
+    <div class="kicker k-home mono">
+      <span class="ln"></span>{
+        kickerParts.map((p, i) => (
+          <>
+            {i > 0 && <b>·</b>}
+            {p}
+          </>
+        ))
+      }
     </div>
-
-    <!-- 3D Cube -->
-    <div class="w-full h-80 lg:h-[500px] order-1 lg:order-2">
-      <CuboAnimado client:load />
+    <h1 class="display">
+      <span class="row" data-decode>VICTOR</span>
+      <span class="row stroked" data-decode>ROMERO</span>
+    </h1>
+    <p class="lead" set:html={t("home.lead")} />
+    <div class="stack mono">
+      {stack.map((s) => <span>{s}</span>)}
+    </div>
+    <div class="cta">
+      <a class="primary mono" href={getLocalizedPath("/projects")}>
+        {t("home.cta.view")} <span>›</span>
+      </a>
+      <a class="ghost mono" href={getLocalizedPath("/contact")}>
+        {t("home.cta.talk")}
+      </a>
     </div>
   </div>
-</div>
+
+  <div class="right">
+    <div class="cube-wrap">
+      <div class="cube-coords tl mono">X:42.0<br />Y:13.7</div>
+      <div class="cube-coords br mono"><b>SYS</b> ONLINE<br />RENDER:GPU</div>
+      <div class="cube-canvas">
+        <CuboAnimated variant="terminal" client:only="react" />
+      </div>
+      <a class="cube-solve" href={getLocalizedPath("/about")}>
+        <span class="cmd mono">&gt; {t("home.cube.solve")}_</span>
+        <span class="sub mono">{t("home.cube.sub")}</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<style>
+  .hero {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 40px;
+    padding: 14px 0 8px;
+  }
+  .left {
+    max-width: 680px;
+  }
+  .k-home {
+    margin-bottom: 26px;
+  }
+  .lead {
+    margin-top: 30px;
+    max-width: 500px;
+    font-size: clamp(15px, 1.15vw, 18px);
+    line-height: 1.6;
+    color: #b9bdba;
+  }
+  .lead :global(b) {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-top: 30px;
+  }
+  .stack span {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+    transition: all 0.2s;
+  }
+  .stack span:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .cta {
+    display: flex;
+    gap: 14px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .cta a {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.22s;
+    cursor: pointer;
+  }
+  .cta .primary {
+    background: var(--accent);
+    color: #05140b;
+    font-weight: 500;
+  }
+  .cta .primary:hover {
+    box-shadow: 0 0 34px -4px var(--accent);
+    transform: translateY(-2px);
+  }
+  .cta .ghost {
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .cta .ghost:hover {
+    border-color: var(--ink);
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+  }
+  .cube-wrap {
+    position: relative;
+    width: min(46vh, 420px);
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cube-coords {
+    position: absolute;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--dimmer);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .cube-coords.tl {
+    top: -6px;
+    left: -6px;
+  }
+  .cube-coords.br {
+    bottom: -6px;
+    right: -6px;
+    text-align: right;
+  }
+  .cube-coords b {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .cube-canvas {
+    position: absolute;
+    inset: 0;
+  }
+  .cube-solve {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 14px;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.25s;
+    background: radial-gradient(
+      ellipse 70% 50% at 50% 100%,
+      rgba(8, 9, 10, 0.85),
+      transparent 75%
+    );
+    z-index: 4;
+  }
+  .cube-wrap:hover .cube-solve,
+  .cube-solve:focus-visible {
+    opacity: 1;
+  }
+  .cube-solve .cmd {
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-shadow: 0 0 14px rgba(59, 255, 136, 0.5);
+  }
+  .cube-solve .sub {
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  @media (max-width: 980px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 8px 0;
+    }
+    .right {
+      order: -1;
+      height: auto;
+      margin-top: 6px;
+    }
+    .cube-wrap {
+      width: min(40vh, 300px);
+    }
+  }
+</style>

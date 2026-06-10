@@ -1,0 +1,268 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import InteractiveCube from "./InteractiveCube.tsx";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+function getLocalizedPath(path: string) {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (lang === "es") return `/es${cleanPath}`;
+  return cleanPath;
+}
+
+const features = [
+  ["rubiks.feature.rotation.title", "rubiks.feature.rotation.desc"],
+  ["rubiks.feature.colors.title", "rubiks.feature.colors.desc"],
+  ["rubiks.feature.scramble.title", "rubiks.feature.scramble.desc"],
+  ["rubiks.feature.controls.title", "rubiks.feature.controls.desc"],
+  ["rubiks.feature.responsive.title", "rubiks.feature.responsive.desc"],
+  ["rubiks.feature.performance.title", "rubiks.feature.performance.desc"],
+] as const;
+
+const arch = ["rubiks.tech.arch.1", "rubiks.tech.arch.2", "rubiks.tech.arch.3", "rubiks.tech.arch.4"] as const;
+const high = ["rubiks.tech.high.1", "rubiks.tech.high.2", "rubiks.tech.high.3", "rubiks.tech.high.4"] as const;
+
+const cubeLabels = {
+  scramble: t("about.cube.scramble"),
+  reset: t("about.cube.reset"),
+  solved: t("about.cube.solved"),
+  scrambled: t("about.cube.scrambled"),
+  status: t("about.cube.status"),
+};
+---
+
+<main class="page">
+  <nav class="crumb mono">
+    <a href={getLocalizedPath("/projects")}>{t("nav.projects")}</a>
+    <span>/</span>
+    <span class="cur">{t("rubiks.title")}</span>
+  </nav>
+
+  <div class="pagehead">
+    <div class="kicker mono"><span class="ln"></span>{t("rubiks.featured")}</div>
+    <h1 class="display"><span class="row" data-decode>{t("rubiks.title")}</span></h1>
+  </div>
+
+  <section class="hero">
+    <div>
+      <p class="lead">{t("rubiks.description")}</p>
+      <div class="ptags mono">
+        <span>React</span><span>Three.js</span><span>TypeScript</span>
+        <span>React Three Fiber</span><span>Astro</span>
+      </div>
+      <a
+        class="visit mono"
+        href="https://github.com/vicctor-romero"
+        target="_blank"
+        rel="noopener">github.com/vicctor-romero →</a
+      >
+    </div>
+    <div>
+      <InteractiveCube labels={cubeLabels} client:only="react" />
+    </div>
+  </section>
+
+  <section class="cols">
+    <div class="card">
+      <h2>{t("rubiks.challenge.title")}</h2>
+      <p>{t("rubiks.challenge.description")}</p>
+    </div>
+    <div class="card">
+      <h2>{t("rubiks.solution.title")}</h2>
+      <p>{t("rubiks.solution.description")}</p>
+    </div>
+  </section>
+
+  <section class="feats">
+    <div class="seclabel" style="margin-bottom:26px">{t("rubiks.features.title")}</div>
+    <div class="fgrid">
+      {
+        features.map(([title, desc]) => (
+          <div class="feat">
+            <h3 class="mono">{t(title)}</h3>
+            <p>{t(desc)}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="cols">
+    <div class="card">
+      <h2>{t("rubiks.tech.architecture")}</h2>
+      <ul>{arch.map((k) => <li>{t(k)}</li>)}</ul>
+    </div>
+    <div class="card">
+      <h2>{t("rubiks.tech.highlights")}</h2>
+      <ul>{high.map((k) => <li>{t(k)}</li>)}</ul>
+    </div>
+  </section>
+
+  <div class="backrow">
+    <a class="back mono" href={getLocalizedPath("/projects")}>← {t("rubiks.back")}</a>
+    <span class="more mono">{t("project.more_coming")}</span>
+  </div>
+</main>
+
+<style>
+  .crumb {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 8px;
+  }
+  .crumb a:hover {
+    color: var(--accent);
+  }
+  .crumb .cur {
+    color: var(--ink);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+    padding: clamp(20px, 4vw, 40px) 0;
+    border-top: 1px solid var(--line);
+    margin-top: 18px;
+  }
+  .lead {
+    font-size: clamp(15px, 1.3vw, 18px);
+    line-height: 1.7;
+    color: #b9bdba;
+    max-width: 460px;
+  }
+  .ptags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 22px;
+  }
+  .ptags span {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    padding: 5px 9px;
+  }
+  .visit {
+    display: inline-flex;
+    margin-top: 28px;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 3px;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+  .visit:hover {
+    border-color: var(--accent);
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(24px, 4vw, 44px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .card h2 {
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .card p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #b3b7b4;
+  }
+  .card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card li {
+    font-size: 14px;
+    color: #c2c6c3;
+    display: flex;
+    gap: 10px;
+  }
+  .card li::before {
+    content: "▸";
+    color: var(--accent);
+  }
+
+  .feats {
+    padding: clamp(24px, 4vw, 44px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .fgrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .feat {
+    background: var(--bg);
+    padding: 24px 22px;
+  }
+  .feat h3 {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .feat p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #b3b7b4;
+  }
+
+  .backrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 24px 0 8px;
+    border-top: 1px solid var(--line);
+  }
+  .back {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.2s;
+  }
+  .back:hover {
+    color: var(--accent);
+  }
+  .more {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--dimmer);
+  }
+
+  @media (max-width: 860px) {
+    .hero,
+    .cols {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .fgrid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

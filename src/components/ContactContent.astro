@@ -1,0 +1,365 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const channels = [
+  { id: "01", label: "GitHub", handle: "vicctor-romero", url: "https://github.com/vicctor-romero" },
+  { id: "02", label: "LinkedIn", handle: "vicctor-romero", url: "https://linkedin.com/in/vicctor-romero" },
+  { id: "03", label: "X / Twitter", handle: "@vicctor_romero", url: "https://twitter.com/vicctor_romero" },
+];
+---
+
+<main class="page">
+  <div class="pagehead">
+    <div class="kicker mono"><span class="ln"></span>{t("contact.kicker")}</div>
+    <h1 class="display">
+      <span class="row" data-decode>{t("contact.h1a")}</span>
+      <span class="row stroked" data-decode>{t("contact.h1b")}</span>
+    </h1>
+  </div>
+
+  <section class="contact">
+    <!-- left -->
+    <div>
+      <p class="clead">{t("contact.lead")}</p>
+
+      <div class="emailrow">
+        <div class="emaillabel">{t("contact.directline")}</div>
+        <a class="email" href="mailto:vmrbaez@gmail.com">
+          vmrbaez@gmail.com <span class="arr mono">→</span>
+        </a>
+      </div>
+
+      <ul class="channels">
+        {
+          channels.map((c) => (
+            <li>
+              <a href={c.url} target="_blank" rel="noopener">
+                <span class="ci mono">{c.id}</span>
+                <span class="cl mono">{c.label}</span>
+                <span class="ch">{c.handle}</span>
+                <span class="carr mono">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="avail mono">
+        <span class="blip"></span>{t("contact.avail")}
+      </div>
+    </div>
+
+    <!-- right: terminal form -->
+    <div class="termbox">
+      <div class="termbar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="t mono">{t("contact.terminal")}</span>
+      </div>
+      <div class="termbody">
+        <form id="cform">
+          <div class="field">
+            <label class="mono">--name</label>
+            <input type="text" name="name" placeholder={t("contact.ph.name")} required />
+          </div>
+          <div class="field">
+            <label class="mono">--email</label>
+            <input type="email" name="email" placeholder={t("contact.ph.email")} required />
+          </div>
+          <div class="field">
+            <label class="mono">--message</label>
+            <textarea name="message" rows="4" placeholder={t("contact.ph.message")} required></textarea>
+          </div>
+          <div class="formfoot">
+            <button class="send mono" type="submit">{t("contact.send")}</button>
+            <span
+              class="formnote mono"
+              id="fnote"
+              data-default={t("contact.note.default")}
+              data-sending={t("contact.note.sending")}
+              data-ok={t("contact.note.ok")}
+              data-error={t("contact.note.error")}
+            >
+              {t("contact.note.default")}
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const form = document.getElementById("cform") as HTMLFormElement | null;
+  const note = document.getElementById("fnote");
+  if (form && note) {
+    const msg = (k: string) => note.dataset[k] || "";
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const payload = {
+        name: String(fd.get("name") || "").trim(),
+        email: String(fd.get("email") || "").trim(),
+        message: String(fd.get("message") || "").trim(),
+      };
+      note.textContent = msg("sending");
+      note.classList.remove("ok", "err");
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          note.textContent = msg("ok");
+          note.classList.add("ok");
+          form.reset();
+        } else {
+          note.textContent = msg("error");
+          note.classList.add("err");
+        }
+      } catch {
+        note.textContent = msg("error");
+        note.classList.add("err");
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 88px);
+    align-items: start;
+    margin-top: 8px;
+    padding-bottom: 20px;
+  }
+  .clead {
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 1.6;
+    color: #b9bdba;
+    max-width: 420px;
+  }
+  .emailrow {
+    margin: 34px 0 8px;
+  }
+  .emaillabel {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--dimmer);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .email {
+    font-size: clamp(1.3rem, 2.6vw, 2.1rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+  .email:hover {
+    color: var(--accent);
+  }
+  .email .arr {
+    font-size: 1rem;
+    color: var(--accent);
+    transition: transform 0.2s;
+  }
+  .email:hover .arr {
+    transform: translateX(5px);
+  }
+
+  .channels {
+    list-style: none;
+    margin-top: 38px;
+    border-top: 1px solid var(--line);
+  }
+  .channels li a {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--line);
+    transition: all 0.22s;
+  }
+  .channels li a:hover {
+    padding-left: 12px;
+  }
+  .channels .ci {
+    font-size: 10px;
+    color: var(--accent);
+    width: 26px;
+  }
+  .channels .cl {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    width: 90px;
+  }
+  .channels .ch {
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .channels .carr {
+    margin-left: auto;
+    color: var(--dimmer);
+    transition: all 0.2s;
+  }
+  .channels li a:hover .carr {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .channels li a:hover .ch {
+    color: var(--accent);
+  }
+
+  .avail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .avail .blip {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: blip 1.6s ease-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blip {
+    0% {
+      box-shadow: 0 0 0 0 rgba(59, 255, 136, 0.5);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgba(59, 255, 136, 0);
+    }
+  }
+
+  /* terminal form */
+  .termbox {
+    border: 1px solid var(--line2);
+    background: linear-gradient(180deg, #0c0e10, #0a0b0c);
+  }
+  .termbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .termbar .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .termbar .dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--dimmer);
+  }
+  .termbar .dots i:first-child {
+    background: var(--accent);
+  }
+  .termbar .t {
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .termbody {
+    padding: 26px clamp(20px, 3vw, 32px) 28px;
+  }
+  .field {
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+    transition: border-color 0.2s;
+  }
+  .field:focus-within {
+    border-color: var(--accent);
+  }
+  .field label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 9px;
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 17px;
+    resize: none;
+    line-height: 1.5;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--dimmer);
+  }
+  .formfoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .send {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: #05140b;
+    font-weight: 500;
+    border: none;
+    padding: 14px 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .send:hover {
+    box-shadow: 0 0 30px -6px var(--accent);
+    transform: translateY(-2px);
+  }
+  .formnote {
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+  }
+  .formnote.ok {
+    color: var(--accent);
+  }
+  .formnote.err {
+    color: #ff5a6b;
+  }
+
+  @media (max-width: 860px) {
+    .contact {
+      grid-template-columns: 1fr;
+      gap: 44px;
+    }
+  }
+</style>

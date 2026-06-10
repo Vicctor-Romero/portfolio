@@ -1,0 +1,141 @@
+---
+import { getLangFromUrl, useTranslations } from "../../i18n/utils";
+import { getProjects } from "../../data/projects";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+function getLocalizedPath(path: string) {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (lang === "es") return `/es${cleanPath}`;
+  return cleanPath;
+}
+
+const projects = getProjects(t, getLocalizedPath);
+---
+
+<footer class="foot-projects">
+  <div>
+    <div class="seclabel" style="margin-bottom:12px">{t("home.work.label")}</div>
+    <ol class="projects">
+      {
+        projects.map((p) => (
+          <li>
+            <a href={getLocalizedPath("/projects")}>
+              <span class="idx mono">{p.num}</span>
+              <span class="pname">{p.title}</span>
+              <span class="pmeta">{p.listMeta}</span>
+              <span class="arr">→</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <div class="status mono">
+    <div>// status: <span class="ok">{t("footer.status")}</span></div>
+    <div>
+      remote · gmt-6 · <span class="clock">--:--:--</span><span class="cursor"
+      ></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot-projects {
+    flex-shrink: 0;
+    border-top: 1px solid var(--line);
+    padding: 18px 0 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+  }
+  .projects {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .projects li a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 9px 0;
+    transition: all 0.22s;
+    position: relative;
+  }
+  .projects li a:hover {
+    padding-left: 12px;
+  }
+  .projects .idx {
+    font-size: 11px;
+    color: var(--accent);
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .projects .pname {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    min-width: 200px;
+  }
+  .projects .pmeta {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .projects .arr {
+    margin-left: auto;
+    color: var(--dimmer);
+    font-size: 14px;
+    transition: all 0.22s;
+    font-family: var(--font-mono);
+  }
+  .projects li a:hover .arr {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+  .projects li a:hover .pname {
+    color: var(--accent);
+  }
+  .status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    text-align: right;
+    line-height: 1.9;
+    white-space: nowrap;
+  }
+  .status .ok {
+    color: var(--accent);
+  }
+  .status .clock {
+    color: var(--ink);
+  }
+
+  @media (max-width: 980px) {
+    .foot-projects {
+      grid-template-columns: 1fr;
+    }
+    .status {
+      text-align: left;
+    }
+    .projects .pname {
+      min-width: 0;
+    }
+  }
+  @media (max-width: 560px) {
+    .projects li a {
+      flex-wrap: wrap;
+      gap: 6px 14px;
+    }
+    .projects .pmeta {
+      width: 100%;
+      padding-left: 40px;
+    }
+  }
+</style>

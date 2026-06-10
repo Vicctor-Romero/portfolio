@@ -1,12 +1,14 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import RubiksDetail from "../../components/RubiksDetail.astro";
+import Hero from "../../components/inicio/Hero.astro";
+import HomeFooter from "../../components/inicio/HomeFooter.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<MainLayout title={`${t("rubiks.title")} — Victor Romero`}>
-  <RubiksDetail />
+<MainLayout title={t("home.title")}>
+  <Hero />
+  <HomeFooter slot="footer" />
 </MainLayout>

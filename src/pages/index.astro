@@ -1,26 +1,14 @@
 ---
-import "../styles/global.css";
-import Header from '../components/inicio/Header.astro'
-import Hero from '../components/inicio/Hero.astro'
 import MainLayout from "../layouts/MainLayout.astro";
+import Hero from "../components/inicio/Hero.astro";
+import HomeFooter from "../components/inicio/HomeFooter.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-
-<MainLayout title="Portfolio Victor">
-  <main class="w-full min-h-screen bg-gray-900 relative overflow-hidden">
-    <!-- Background Effects -->
-    <div class="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] sm:w-[60%] h-[80%] sm:h-[60%] bg-gradient-to-tr from-blue-900/50 via-transparent to-red-900/50 rounded-full blur-3xl animate-pulse"></div>
-
-    <Header />
-    
-    <!-- Hero Section -->
-    <section class="relative w-full min-h-screen flex items-center justify-center px-4 py-20">
-      <Hero />
-    </section>
-  </main>
+<MainLayout title={t("home.title")}>
+  <Hero />
+  <HomeFooter slot="footer" />
 </MainLayout>
-
