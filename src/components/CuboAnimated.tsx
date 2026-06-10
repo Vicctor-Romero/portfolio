@@ -5,9 +5,28 @@ import { Box, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { Vector3 } from 'three';
 
-// --- Estilo Visual Plano y Tipos (sin cambios) ---
-const colors = { top: '#ffffff', bottom: '#ffcf00', front: '#0051ba', back: '#009e60', right: '#c41e3a', left: '#ff5800', inside: '#1c1c1c' };
-const materials = [ new THREE.MeshBasicMaterial({ color: colors.right }), new THREE.MeshBasicMaterial({ color: colors.left }), new THREE.MeshBasicMaterial({ color: colors.top }), new THREE.MeshBasicMaterial({ color: colors.bottom }), new THREE.MeshBasicMaterial({ color: colors.front }), new THREE.MeshBasicMaterial({ color: colors.back }), ];
+// --- Paletas de color ---
+// `classic` = colores reales del cubo de Rubik (página de detalle del proyecto).
+// `terminal` = oscuro + verde-hacker para el look del Home.
+export interface CubePalette {
+  top: string; bottom: string; front: string; back: string; right: string; left: string; inside: string;
+}
+export const PALETTES: Record<'classic' | 'terminal', CubePalette> = {
+  classic: { top: '#ffffff', bottom: '#ffcf00', front: '#0051ba', back: '#009e60', right: '#c41e3a', left: '#ff5800', inside: '#1c1c1c' },
+  // Verdes oscuros (sin negro, para que las aristas negras no se pierdan) +
+  // una cara clara (blanco-menta) que da contraste. Interior verde-gris oscuro.
+  terminal: { top: '#e8fff3', bottom: '#1a5436', front: '#2b9a5e', back: '#1d4e33', right: '#23834f', left: '#1d5a3e', inside: '#243029' },
+};
+
+// metallic=true → MeshStandardMaterial (reflejos con las luces de la escena);
+// metallic=false → MeshBasicMaterial plano (colores planos del cubo clásico).
+const buildMaterials = (p: CubePalette, metallic: boolean) => {
+  const mk = (color: string) =>
+    metallic
+      ? new THREE.MeshStandardMaterial({ color, metalness: 0.74, roughness: 0.26 })
+      : new THREE.MeshBasicMaterial({ color });
+  return [mk(p.right), mk(p.left), mk(p.top), mk(p.bottom), mk(p.front), mk(p.back)];
+};
 
 interface CubieState {
   id: string;
@@ -17,14 +36,18 @@ interface CubieState {
 }
 type Move = { axis: 'x' | 'y' | 'z'; slice: -1 | 0 | 1; direction: 1 | -1; };
 
-// --- Componente Cubie (No necesita cambios) ---
-const Cubie: FC<{ cubieState: CubieState, groupRef: React.Ref<THREE.Group> }> = ({ cubieState, groupRef }) => {
+// --- Componente Cubie ---
+const Cubie: FC<{ cubieState: CubieState, groupRef: React.Ref<THREE.Group>, palette: CubePalette, metallic: boolean }> = ({ cubieState, groupRef, palette, metallic }) => {
   const { logicalPosition, position, rotation } = cubieState;
+  const materials = buildMaterials(palette, metallic);
+  const insideMat = () => metallic
+    ? new THREE.MeshStandardMaterial({ color: palette.inside, metalness: 0.74, roughness: 0.26 })
+    : new THREE.MeshBasicMaterial({ color: palette.inside });
   const coloredMaterials = materials.map((mat, i) => {
     const { x, y, z } = logicalPosition;
     if (i === 0 && x >= 1) return mat; if (i === 1 && x <= -1) return mat; if (i === 2 && y >= 1) return mat;
     if (i === 3 && y <= -1) return mat; if (i === 4 && z >= 1) return mat; if (i === 5 && z <= -1) return mat;
-    return new THREE.MeshBasicMaterial({ color: colors.inside });
+    return insideMat();
   });
 
   return (
@@ -40,7 +63,7 @@ const Cubie: FC<{ cubieState: CubieState, groupRef: React.Ref<THREE.Group> }> = 
 };
 
 // --- Funciones de Lógica (sin cambios) ---
-const getInitialCubiesState = (): CubieState[] => { /* ... */ 
+const getInitialCubiesState = (): CubieState[] => { /* ... */
   const allCubies: CubieState[] = []; const spacing = 1.05;
   for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
     const logicalPos = new THREE.Vector3(x, y, z);
@@ -48,18 +71,18 @@ const getInitialCubiesState = (): CubieState[] => { /* ... */
   }
   return allCubies;
 };
-const generateScrambleSequence = (length: number = 20): Move[] => { /* ... */ 
+const generateScrambleSequence = (length: number = 20): Move[] => { /* ... */
   const moves: Move[] = []; const axes: ('x' | 'y' | 'z')[] = ['x', 'y', 'z']; const slices: (-1 | 0 | 1)[] = [-1, 0, 1]; const directions: (1 | -1)[] = [1, -1];
   for (let i = 0; i < length; i++) { moves.push({ axis: axes[Math.floor(Math.random() * axes.length)], slice: slices[Math.floor(Math.random() * slices.length)], direction: directions[Math.floor(Math.random() * directions.length)], }); }
   return moves;
 };
 
 // --- Componente del Cubo Autónomo con Animación Interpolada ---
-function RubiksCube() {
+function RubiksCube({ palette, metallic }: { palette: CubePalette; metallic: boolean }) {
   const [cubies, setCubies] = useState<CubieState[]>(getInitialCubiesState);
   const [isAnimating, setIsAnimating] = useState(false);
   const [moveQueue, setMoveQueue] = useState<Move[]>([]);
-  
+
   // Guardamos una referencia a cada grupo de cubito para manipularlos directamente
   const cubieRefs = useRef<{ [key: string]: THREE.Group }>({});
 
@@ -75,9 +98,9 @@ function RubiksCube() {
 
   const startRotation = useCallback((move: Move) => {
     if (isAnimating) return;
-    
+
     const affected = cubies.filter(c => Math.round(c.position[move.axis] / 1.05) === move.slice);
-    
+
     animationState.current = {
       progress: 0,
       activeMove: move,
@@ -87,7 +110,7 @@ function RubiksCube() {
 
     setIsAnimating(true);
   }, [cubies, isAnimating]);
-  
+
   // Lógica para la cola de animación (sin cambios)
   useEffect(() => {
     if (!isAnimating && moveQueue.length > 0) {
@@ -103,7 +126,7 @@ function RubiksCube() {
   // NUEVO: El corazón de la animación fluida
   useFrame((state, delta) => {
     if (!isAnimating) return;
-    
+
     // 1. Avanzamos el progreso de la animación
     animationState.current.progress += delta * 0.5; // Velocidad de animación
     const progress = Math.min(animationState.current.progress, 1);
@@ -122,10 +145,10 @@ function RubiksCube() {
       const group = cubieRefs.current[cubie.id];
       if (group) {
         const startState = startStates.get(cubie.id)!;
-        
+
         // Rotamos la posición y la orientación desde su estado inicial
         group.position.copy(startState.position).applyMatrix4(rotationMatrix);
-        
+
         const turnQuaternion = new THREE.Quaternion().setFromRotationMatrix(rotationMatrix);
         group.quaternion.copy(startState.rotation).premultiply(turnQuaternion);
       }
@@ -135,9 +158,9 @@ function RubiksCube() {
     if (progress >= 1) {
       setCubies(prevCubies => {
         const finalRotationMatrix = new THREE.Matrix4();
-        if (activeMove!.axis === 'x') finalRotationMatrix.makeRotationX((Math.PI/2) * activeMove!.direction);
-        if (activeMove!.axis === 'y') finalRotationMatrix.makeRotationY((Math.PI/2) * activeMove!.direction);
-        if (activeMove!.axis === 'z') finalRotationMatrix.makeRotationZ((Math.PI/2) * activeMove!.direction);
+        if (activeMove!.axis === 'x') finalRotationMatrix.makeRotationX((Math.PI / 2) * activeMove!.direction);
+        if (activeMove!.axis === 'y') finalRotationMatrix.makeRotationY((Math.PI / 2) * activeMove!.direction);
+        if (activeMove!.axis === 'z') finalRotationMatrix.makeRotationZ((Math.PI / 2) * activeMove!.direction);
 
         return prevCubies.map(cubie => {
           if (startStates.has(cubie.id)) {
@@ -151,23 +174,40 @@ function RubiksCube() {
       setIsAnimating(false);
     }
   });
-  
+
   return (
     <>
       {cubies.map(c => (
-        <Cubie key={c.id} cubieState={c} groupRef={el => { if (el) cubieRefs.current[c.id] = el; }} />
+        <Cubie key={c.id} cubieState={c} palette={palette} metallic={metallic} groupRef={el => { if (el) cubieRefs.current[c.id] = el; }} />
       ))}
     </>
   );
 }
 
-// --- Componente de exportación (sin cambios) ---
-export default function CuboAnimado() {
+// --- Componente de exportación ---
+interface CuboAnimatedProps {
+  /** 'classic' = colores reales · 'terminal' = oscuro+verde (Home) */
+  variant?: 'classic' | 'terminal';
+  autoRotateSpeed?: number;
+}
+export default function CuboAnimated({ variant = 'classic', autoRotateSpeed = 0.5 }: CuboAnimatedProps) {
+  const palette = PALETTES[variant];
+  const metallic = variant === 'terminal';
   return (
     <Canvas camera={{ position: [4, 4, 5], fov: 42 }}>
-      <ambientLight intensity={5} />
-      <RubiksCube />
-      <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+      {metallic ? (
+        <>
+          {/* luz para que el metal tenga reflejos y un brillo verde de acento */}
+          <ambientLight intensity={0.55} />
+          <directionalLight position={[6, 9, 7]} intensity={2.6} />
+          <directionalLight position={[-7, -2, -4]} intensity={0.8} color="#3bff88" />
+          <pointLight position={[0, 1, 6]} intensity={1.6} color="#bfffe0" />
+        </>
+      ) : (
+        <ambientLight intensity={5} />
+      )}
+      <RubiksCube palette={palette} metallic={metallic} />
+      <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={autoRotateSpeed} />
     </Canvas>
   );
 }
