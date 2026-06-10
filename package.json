@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.6",
     "@astrojs/netlify": "^6.4.0",
     "@astrojs/react": "^4.3.0",
     "@react-three/drei": "^10.3.0",
@@ -20,7 +21,7 @@
     "astro": "^5.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwind": "^4.0.0",
-    "three": "^0.177.0"
+    "three": "^0.177.0",
+    "typescript": "^5.9.3"
   }
 }
