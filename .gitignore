@@ -1,5 +1,9 @@
 # build output
 dist/
+.netlify/
+
+# non-canonical lockfile (this project uses bun.lock)
+package-lock.json
 
 # generated types
 .astro/
