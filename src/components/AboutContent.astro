@@ -18,23 +18,37 @@ const skills = [
   { h: "Infra", items: ["Docker", "CI / CD", "AWS / Vercel", "Git"] },
 ];
 
-// Album covers + photos: drop real image URLs into `src` to fill them.
-const albums = [
-  { album: "Album one", artist: "Artist", src: "" },
-  { album: "Album two", artist: "Artist", src: "" },
-  { album: "Album three", artist: "Artist", src: "" },
-  { album: "Album four", artist: "Artist", src: "" },
-  { album: "Album five", artist: "Artist", src: "" },
-  { album: "Album six", artist: "Artist", src: "" },
-  { album: "Album seven", artist: "Artist", src: "" },
-  { album: "Album eight", artist: "Artist", src: "" },
+// On Repeat: each cover links out to Spotify.
+//   cover = album artwork image URL (e.g. the Spotify cover image)
+//   url   = Spotify link to the track/album (Share → Copy link)
+// Fill these with your real favorites; empty entries show a placeholder.
+const albums: { album: string; artist: string; cover: string; url: string }[] = [
+  { album: "Sunrise", artist: "Simply Red", cover: "https://i.scdn.co/image/ab67616d0000b27317a3d8e105d4f872fc66893d", url: "https://open.spotify.com/track/4LxDdYU3x9tyDxy3CghqdC" },
+  { album: "High Hopes", artist: "Pink Floyd", cover: "https://i.scdn.co/image/ab67616d0000b273f508f0949710aa33a79cf6b2", url: "https://open.spotify.com/track/5a4MgIUSf9K8wXLSm6xPEx" },
+  { album: "Kill Me", artist: "Hayley Williams", cover: "https://i.scdn.co/image/ab67616d0000b2734f422ed700af8715b23326af", url: "https://open.spotify.com/track/3yiWkaQvp8cYt64M1bSVb9" },
+  { album: "Don't Forget Me", artist: "Red Hot Chili Peppers", cover: "https://i.scdn.co/image/ab67616d0000b273de1af2785a83cc660155a0c4", url: "https://open.spotify.com/track/308kjPoIVBzDNExO54sqAi" },
+  { album: "Silverflame", artist: "Dizzy Mizz Lizzy", cover: "https://i.scdn.co/image/ab67616d0000b2737ec8a4d551207a6874fbbbbf", url: "https://open.spotify.com/track/2fwfZDXNBxx2alE6clKQcZ" },
+  { album: "City Life", artist: "Rebelution", cover: "https://i.scdn.co/image/ab67616d0000b27390f8713033cb2f6bf3126569", url: "https://open.spotify.com/track/1ozK6iAeBgCOSXecRojzMo" },
+  { album: "2448", artist: "deadmau5", cover: "https://i.scdn.co/image/ab67616d0000b273a43f9418af7e912a42b40d27", url: "https://open.spotify.com/track/1GFxA50oIo05KP5v8ccqKk" },
+  { album: "High", artist: "Sir Sly", cover: "https://i.scdn.co/image/ab67616d0000b273afffc8aea37762b4daa91e8b", url: "https://open.spotify.com/track/17aDyX39gb1iV1ZWvD1ffE" },
+  { album: "Paranoid", artist: "Black Sabbath", cover: "https://i.scdn.co/image/ab67616d0000b273605b25c031f809d78054a13c", url: "https://open.spotify.com/track/3Jnxngdff0lVu2rza1GVx6" },
+  { album: "Could Have Been Me", artist: "The Struts", cover: "https://i.scdn.co/image/ab67616d0000b27301fc57d639133319122c4ff4", url: "https://open.spotify.com/track/3IyCL4Em1GOpNGDf451Hg1" },
+  { album: "My Blood", artist: "Twenty One Pilots", cover: "https://i.scdn.co/image/ab67616d0000b273d1d301e737da4324479c6660", url: "https://open.spotify.com/track/5HeKOKc4phmLn8e4I7EkzD" },
+  { album: "Nueva Tierra", artist: "Xican", cover: "https://i.scdn.co/image/ab67616d0000b273c2ca50934fc2d073cb3a5101", url: "https://open.spotify.com/track/5BZignIxSCrb0FramLkloj" },
+  { album: "0 GRAVITY", artist: "Zior Park", cover: "https://i.scdn.co/image/ab67616d0000b27314dabc27dec03c4ea1ffd576", url: "https://open.spotify.com/track/7yc7XqMqoJZe28MfPqDjVg" },
+  { album: "Gone Forever", artist: "Three Days Grace", cover: "https://i.scdn.co/image/ab67616d0000b273e773763694ac5eb7f2aa0a37", url: "https://open.spotify.com/track/2Xe2YAxNPqWCNpZ8RagBdO" },
+  { album: "Let You Down", artist: "Seether", cover: "https://i.scdn.co/image/ab67616d0000b273ac3fb5916dd26f3f87609b06", url: "https://open.spotify.com/track/2UcXM8xEP95IYz7rguHSnA" },
 ];
-const photos = [
-  { cap: "01 · somewhere", w: 200, h: 240, src: "" },
-  { cap: "02 · the setup", w: 260, h: 190, src: "" },
-  { cap: "03 · off-grid", w: 200, h: 240, src: "" },
-  { cap: "04 · good company", w: 240, h: 200, src: "" },
-  { cap: "05 · the view", w: 210, h: 230, src: "" },
+// On the Shelf: books I've read. cover = Google Books cover (by volume id),
+// url = the Google Books edition page.
+const books: { title: string; author: string; cover: string; url: string }[] = [
+  { title: "The Martian", author: "Andy Weir", cover: "https://books.google.com/books/content?id=2NIpDAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/The_Martian/2NIpDAAAQBAJ" },
+  { title: "Project Hail Mary", author: "Andy Weir", cover: "https://books.google.com/books/content?id=GrYsEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Project_Hail_Mary/GrYsEAAAQBAJ" },
+  { title: "Artemis", author: "Andy Weir", cover: "https://books.google.com/books/content?id=qqg_DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Artemis/qqg_DwAAQBAJ" },
+  { title: "La sombra del viento", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=I3m2qUbB5hIC&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_sombra_del_viento_Shadow_of_the_Wind/I3m2qUbB5hIC" },
+  { title: "El juego del ángel", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=1msZEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_juego_del_angel/1msZEAAAQBAJ" },
+  { title: "El Laberinto de los Espíritus", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=JTE7DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Laberinto_de_los_Esp%C3%ADritus_The_Labyri/JTE7DwAAQBAJ" },
+  { title: "El Prisionero del Cielo", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=S7O6pV1qXj0C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Prisionero_del_Cielo_The_Prisoner_of_/S7O6pV1qXj0C" },
 ];
 
 const cubeLabels = {
@@ -55,10 +69,6 @@ const cubeLabels = {
   <!-- BIO -->
   <section class="sec" style="border-top:none;padding-top:18px">
     <div class="bio">
-      <div class="portrait">
-        <span class="tag mono">[ VR.JPG ]</span>
-        <div class="img-empty mono">drop a photo of you</div>
-      </div>
       <div>
         <div class="term">
           <span class="l"><span class="p">$</span><span class="g">whoami</span></span>
@@ -130,10 +140,15 @@ const cubeLabels = {
     <div class="albums">
       {
         albums.map((a) => (
-          <div class="album">
+          <a
+            class="album"
+            href={a.url || undefined}
+            target={a.url ? "_blank" : undefined}
+            rel="noopener"
+          >
             <div class="cover">
-              {a.src ? (
-                <img src={a.src} alt={a.album} loading="lazy" />
+              {a.cover ? (
+                <img src={a.cover} alt={a.album} loading="lazy" />
               ) : (
                 <div class="img-empty mono">cover</div>
               )}
@@ -145,7 +160,7 @@ const cubeLabels = {
               <b>{a.album}</b>
               {a.artist}
             </div>
-          </div>
+          </a>
         ))
       }
     </div>
@@ -157,18 +172,27 @@ const cubeLabels = {
       <h2>{t("about.offclock")}</h2>
       <span class="hint mono">{t("about.offclock.hint")}</span>
     </div>
-    <div class="gallery">
+    <div class="shelf">
       {
-        photos.map((p) => (
-          <div class="photo">
-            <div
-              class="img-empty mono"
-              style={`width:${p.w}px;height:${p.h}px`}
-            >
-              {p.src ? <img src={p.src} alt={p.cap} loading="lazy" /> : "drop a photo"}
+        books.map((b) => (
+          <a
+            class="book"
+            href={b.url || undefined}
+            target={b.url ? "_blank" : undefined}
+            rel="noopener"
+          >
+            <div class="bcover">
+              {b.cover ? (
+                <img src={b.cover} alt={b.title} loading="lazy" />
+              ) : (
+                <div class="img-empty mono">book</div>
+              )}
             </div>
-            <div class="ph-cap mono">{p.cap}</div>
-          </div>
+            <div class="bcap mono">
+              <b>{b.title}</b>
+              {b.author}
+            </div>
+          </a>
         ))
       }
     </div>
@@ -233,27 +257,7 @@ const cubeLabels = {
 
   /* bio */
   .bio {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: clamp(28px, 4vw, 56px);
-    align-items: start;
-  }
-  .portrait {
-    position: relative;
-    aspect-ratio: 3/4;
-    border: 1px solid var(--line);
-    background: #0b0d0e;
-    overflow: hidden;
-  }
-  .portrait .tag {
-    position: absolute;
-    bottom: 9px;
-    left: 9px;
-    font-size: 9px;
-    letter-spacing: 0.14em;
-    color: var(--accent);
-    z-index: 3;
-    pointer-events: none;
+    max-width: 640px;
   }
   .term {
     font-family: var(--font-mono);
@@ -474,45 +478,62 @@ const cubeLabels = {
     }
   }
 
-  /* photo gallery */
-  .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 22px;
-    align-items: flex-start;
+  /* bookshelf */
+  .shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 18px 16px;
   }
-  .photo {
+  .book {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .bcover {
     position: relative;
-    background: #0c0e10;
+    aspect-ratio: 2/3;
     border: 1px solid var(--line);
-    padding: 9px 9px 30px;
+    overflow: hidden;
+    background: #0b0d0e;
     transition:
       transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
       box-shadow 0.3s,
+      filter 0.3s,
       border-color 0.3s;
   }
-  .photo .img-empty {
+  .shelf:hover .book .bcover {
+    filter: grayscale(0.7) brightness(0.7);
+  }
+  .book:hover .bcover {
+    transform: translateY(-6px);
+    filter: none !important;
+    border-color: var(--accent);
+    box-shadow:
+      0 18px 40px -16px rgba(0, 0, 0, 0.9),
+      0 0 0 1px var(--accent);
+    z-index: 5;
+  }
+  .bcover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
   }
-  .photo .ph-cap {
-    position: absolute;
-    bottom: 8px;
-    left: 10px;
-    font-size: 9.5px;
-    letter-spacing: 0.06em;
+  .bcap {
+    font-size: 10px;
+    letter-spacing: 0.04em;
     color: var(--dim);
+    line-height: 1.5;
   }
-  .photo:nth-child(odd) {
-    transform: rotate(-2.2deg);
+  .bcap b {
+    display: block;
+    color: #c2c6c3;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
   }
-  .photo:nth-child(even) {
-    transform: rotate(1.8deg);
-  }
-  .photo:hover {
-    transform: rotate(0deg) translateY(-6px);
-    border-color: var(--accent);
-    box-shadow: 0 20px 44px -18px rgba(0, 0, 0, 0.9);
-    z-index: 5;
+  .book:hover .bcap b {
+    color: var(--accent);
   }
 
   /* closing */
@@ -539,12 +560,6 @@ const cubeLabels = {
   }
 
   @media (max-width: 860px) {
-    .bio {
-      grid-template-columns: 1fr;
-    }
-    .portrait {
-      max-width: 280px;
-    }
     .cubegrid {
       grid-template-columns: 1fr;
     }
