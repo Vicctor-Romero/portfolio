@@ -33,43 +33,44 @@ const count = String(projects.length).padStart(2, "0");
   <section class="work">
     {
       projects.map((p) => (
-        <article class="proj">
-          <div class="pinfo">
-            <div class="num">
-              {p.num} — {p.category}
+        <details class="proj" name="projects">
+          <summary>
+            <span class="pnum mono">{p.num}</span>
+            <span class="pname">{p.title}</span>
+            <span class="pmeta mono">{p.listMeta}</span>
+            <span class="ind mono" aria-hidden="true" />
+          </summary>
+
+          <div class="panel">
+            <div class="pinfo">
+              <div class="role">
+                <span class="pill">{p.rolePill}</span> {p.roleMeta}
+              </div>
+              <p class="pdesc">{p.description}</p>
+              <div class="ptags mono">
+                {p.tags.map((tag) => (
+                  <span>{tag}</span>
+                ))}
+              </div>
+              {p.comingSoon ? (
+                <span class="visit soon mono">{t("proj.coming_soon")} →</span>
+              ) : (
+                <a class="visit mono" href={p.visit!.url} target="_blank" rel="noopener">
+                  {p.visit!.label} →
+                </a>
+              )}
             </div>
-            <h2 class="pname">{p.title}</h2>
-            <div class="role">
-              <span class="pill">{p.rolePill}</span> {p.roleMeta}
+
+            <div class="pmedia">
+              <span class="tag mono">{p.tag}</span>
+              {p.image ? (
+                <img src={p.image} alt={p.title} loading="lazy" />
+              ) : (
+                <div class="media-empty mono">[ {t("proj.coming_soon")} ]</div>
+              )}
             </div>
-            <p class="pdesc">{p.description}</p>
-            <div class="ptags mono">
-              {p.tags.map((tag) => (
-                <span>{tag}</span>
-              ))}
-            </div>
-            {p.comingSoon ? (
-              <span class="visit soon">{t("proj.coming_soon")} →</span>
-            ) : (
-              <a
-                class="visit"
-                href={p.visit!.url}
-                target="_blank"
-                rel="noopener"
-              >
-                {p.visit!.label} →
-              </a>
-            )}
           </div>
-          <div class="pmedia">
-            <span class="tag mono">{p.tag}</span>
-            {p.image ? (
-              <img src={p.image} alt={p.title} loading="lazy" />
-            ) : (
-              <div class="media-empty mono">[ {t("proj.coming_soon")} ]</div>
-            )}
-          </div>
-        </article>
+        </details>
       ))
     }
   </section>
@@ -105,36 +106,96 @@ const count = String(projects.length).padStart(2, "0");
   .work {
     margin-top: 14px;
   }
+
+  /* ---- accordion row ---- */
   .proj {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(28px, 4vw, 64px);
-    padding: clamp(34px, 5vw, 58px) 0;
     border-top: 1px solid var(--line);
-    align-items: center;
   }
   .proj:last-child {
     border-bottom: 1px solid var(--line);
   }
-  .proj:nth-child(even) .pmedia {
-    order: -1;
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 22px 0;
+    transition: padding 0.2s;
   }
-  .num {
-    font-family: var(--font-mono);
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    padding-left: 12px;
+  }
+  .pnum {
     font-size: 12px;
     letter-spacing: 0.2em;
     color: var(--accent);
+    flex-shrink: 0;
   }
   .pname {
-    font-size: clamp(2rem, 3.4vw, 3rem);
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     line-height: 1;
-    margin: 14px 0 12px;
     text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  summary:hover .pname,
+  .proj[open] .pname {
+    color: var(--accent);
+  }
+  .pmeta {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ind {
+    margin-left: auto;
+    color: var(--dimmer);
+    font-size: 16px;
+    line-height: 1;
+    align-self: center;
+    transition: color 0.2s, transform 0.25s;
+    flex-shrink: 0;
+  }
+  .ind::after {
+    content: "+";
+  }
+  summary:hover .ind {
+    color: var(--accent);
+  }
+  .proj[open] .ind {
+    color: var(--accent);
+    transform: rotate(45deg);
+  }
+
+  /* ---- expanded panel ---- */
+  .panel {
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    padding: 4px 0 38px;
+  }
+  .proj[open] .panel {
+    animation: reveal 0.3s ease;
+  }
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   .role {
-    font-family: var(--font-mono);
     font-size: 10.5px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -143,6 +204,7 @@ const count = String(projects.length).padStart(2, "0");
     gap: 10px;
     align-items: center;
     flex-wrap: wrap;
+    font-family: var(--font-mono);
   }
   .role .pill {
     border: 1px solid var(--line);
@@ -151,7 +213,7 @@ const count = String(projects.length).padStart(2, "0");
     white-space: nowrap;
   }
   .pdesc {
-    margin-top: 20px;
+    margin-top: 18px;
     max-width: 440px;
     font-size: 15px;
     line-height: 1.65;
@@ -161,7 +223,7 @@ const count = String(projects.length).padStart(2, "0");
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
-    margin-top: 20px;
+    margin-top: 18px;
   }
   .ptags span {
     font-size: 10px;
@@ -174,8 +236,7 @@ const count = String(projects.length).padStart(2, "0");
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    margin-top: 26px;
-    font-family: var(--font-mono);
+    margin-top: 24px;
     font-size: 11.5px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -184,7 +245,6 @@ const count = String(projects.length).padStart(2, "0");
     padding-bottom: 3px;
     transition: all 0.2s;
     width: fit-content;
-    white-space: nowrap;
   }
   .visit:hover {
     border-color: var(--accent);
@@ -197,36 +257,32 @@ const count = String(projects.length).padStart(2, "0");
 
   .pmedia {
     position: relative;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/10;
     border: 1px solid var(--line);
     background: #0b0d0e;
     overflow: hidden;
   }
-  .pmedia::before {
+  .pmedia::before,
+  .pmedia::after {
     content: "";
     position: absolute;
-    top: 9px;
-    left: 9px;
     width: 14px;
     height: 14px;
-    border-top: 1.5px solid var(--accent);
-    border-left: 1.5px solid var(--accent);
     opacity: 0.6;
     z-index: 3;
     pointer-events: none;
   }
+  .pmedia::before {
+    top: 9px;
+    left: 9px;
+    border-top: 1.5px solid var(--accent);
+    border-left: 1.5px solid var(--accent);
+  }
   .pmedia::after {
-    content: "";
-    position: absolute;
     bottom: 9px;
     right: 9px;
-    width: 14px;
-    height: 14px;
     border-bottom: 1.5px solid var(--accent);
     border-right: 1.5px solid var(--accent);
-    opacity: 0.6;
-    z-index: 3;
-    pointer-events: none;
   }
   .pmedia img {
     width: 100%;
@@ -242,7 +298,6 @@ const count = String(projects.length).padStart(2, "0");
     letter-spacing: 0.16em;
     color: var(--dimmer);
     z-index: 3;
-    pointer-events: none;
   }
   .media-empty {
     position: absolute;
@@ -256,13 +311,23 @@ const count = String(projects.length).padStart(2, "0");
     text-transform: uppercase;
   }
 
-  @media (max-width: 860px) {
-    .proj {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 36px 0;
+  @media (max-width: 760px) {
+    summary {
+      flex-wrap: wrap;
+      gap: 6px 14px;
     }
-    .proj:nth-child(even) .pmedia,
+    .pmeta {
+      width: 100%;
+      padding-left: 30px;
+      white-space: normal;
+    }
+    .ind {
+      align-self: flex-start;
+    }
+    .panel {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
     .pmedia {
       order: -1;
     }
