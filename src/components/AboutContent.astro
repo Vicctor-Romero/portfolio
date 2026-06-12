@@ -41,14 +41,36 @@ const albums: { album: string; artist: string; cover: string; url: string }[] = 
 ];
 // On the Shelf: books I've read. cover = Google Books cover (by volume id),
 // url = the Google Books edition page.
-const books: { title: string; author: string; cover: string; url: string }[] = [
-  { title: "The Martian", author: "Andy Weir", cover: "https://books.google.com/books/content?id=2NIpDAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/The_Martian/2NIpDAAAQBAJ" },
-  { title: "Project Hail Mary", author: "Andy Weir", cover: "https://books.google.com/books/content?id=GrYsEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Project_Hail_Mary/GrYsEAAAQBAJ" },
-  { title: "Artemis", author: "Andy Weir", cover: "https://books.google.com/books/content?id=qqg_DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Artemis/qqg_DwAAQBAJ" },
-  { title: "La sombra del viento", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=I3m2qUbB5hIC&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_sombra_del_viento_Shadow_of_the_Wind/I3m2qUbB5hIC" },
-  { title: "El juego del ángel", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=1msZEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_juego_del_angel/1msZEAAAQBAJ" },
-  { title: "El Laberinto de los Espíritus", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=JTE7DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Laberinto_de_los_Esp%C3%ADritus_The_Labyri/JTE7DwAAQBAJ" },
-  { title: "El Prisionero del Cielo", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=S7O6pV1qXj0C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Prisionero_del_Cielo_The_Prisoner_of_/S7O6pV1qXj0C" },
+// es/en titles switch with the page language; author stays the same.
+const books: { es: string; en: string; author: string; cover: string; url: string }[] = [
+  { es: "El marciano", en: "The Martian", author: "Andy Weir", cover: "https://books.google.com/books/content?id=2NIpDAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/The_Martian/2NIpDAAAQBAJ" },
+  { es: "Proyecto Hail Mary", en: "Project Hail Mary", author: "Andy Weir", cover: "https://books.google.com/books/content?id=GrYsEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Project_Hail_Mary/GrYsEAAAQBAJ" },
+  { es: "Artemisa", en: "Artemis", author: "Andy Weir", cover: "https://books.google.com/books/content?id=qqg_DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Artemis/qqg_DwAAQBAJ" },
+  { es: "La sombra del viento", en: "The Shadow of the Wind", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=I3m2qUbB5hIC&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_sombra_del_viento_Shadow_of_the_Wind/I3m2qUbB5hIC" },
+  { es: "El juego del ángel", en: "The Angel's Game", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=1msZEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_juego_del_angel/1msZEAAAQBAJ" },
+  { es: "El laberinto de los espíritus", en: "The Labyrinth of Spirits", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=JTE7DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Laberinto_de_los_Esp%C3%ADritus_The_Labyri/JTE7DwAAQBAJ" },
+  { es: "El prisionero del cielo", en: "The Prisoner of Heaven", author: "Carlos Ruiz Zafón", cover: "https://books.google.com/books/content?id=S7O6pV1qXj0C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Prisionero_del_Cielo_The_Prisoner_of_/S7O6pV1qXj0C" },
+  { es: "Noches blancas", en: "White Nights", author: "Fiódor Dostoievski", cover: "https://books.google.com/books/content?id=Hc8UEQAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Noches_blancas/Hc8UEQAAQBAJ" },
+  { es: "Crimen y castigo", en: "Crime and Punishment", author: "Fiódor Dostoievski", cover: "https://books.google.com/books/content?id=Me58EAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_crimen_y_el_castigo/Me58EAAAQBAJ" },
+  { es: "El extranjero", en: "The Stranger", author: "Albert Camus", cover: "https://books.google.com/books/content?id=dDgmEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_extranjero/dDgmEAAAQBAJ" },
+  { es: "Novela de ajedrez", en: "Chess Story", author: "Stefan Zweig", cover: "https://books.google.com/books/content?id=Siab0QEACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Novela_de_Ajedrez_Chess_Story/Siab0QEACAAJ" },
+  { es: "Carta de una desconocida", en: "Letter from an Unknown Woman", author: "Stefan Zweig", cover: "https://books.google.com/books/content?id=pVXJEQAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Carta_de_una_desconocida/pVXJEQAAQBAJ" },
+  { es: "Los miserables", en: "Les Misérables", author: "Victor Hugo", cover: "https://books.google.com/books/content?id=JIBfMQEACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/_/JIBfMQEACAAJ" },
+  { es: "El retrato de Dorian Gray", en: "The Picture of Dorian Gray", author: "Oscar Wilde", cover: "https://books.google.com/books/content?id=AXpcSAAACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/_/AXpcSAAACAAJ" },
+  { es: "El gran Gatsby", en: "The Great Gatsby", author: "F. Scott Fitzgerald", cover: "https://books.google.com/books/content?id=2_Tl0QEACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/The_Great_Gatsby/2_Tl0QEACAAJ" },
+  { es: "1984", en: "1984", author: "George Orwell", cover: "https://books.google.com/books/content?id=Dgv0DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/1984/Dgv0DwAAQBAJ" },
+  { es: "Rebelión en la granja", en: "Animal Farm", author: "George Orwell", cover: "https://books.google.com/books/content?id=_DtEPQAACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/_/_DtEPQAACAAJ" },
+  { es: "Un mundo feliz", en: "Brave New World", author: "Aldous Huxley", cover: "https://books.google.com/books/content?id=sRK2DwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Un_mundo_feliz/sRK2DwAAQBAJ" },
+  { es: "El señor de las moscas", en: "Lord of the Flies", author: "William Golding", cover: "https://books.google.com/books/content?id=ozyEDwAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_Se%C3%B1or_de_las_Moscas/ozyEDwAAQBAJ" },
+  { es: "Crónica de una muerte anunciada", en: "Chronicle of a Death Foretold", author: "Gabriel García Márquez", cover: "https://books.google.com/books/content?id=T0dnswEACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Cronica_de_Una_Muerte_Anunciada/T0dnswEACAAJ" },
+  { es: "Cien años de soledad", en: "One Hundred Years of Solitude", author: "Gabriel García Márquez", cover: "https://books.google.com/books/content?id=ESeaAAAAIAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/_/ESeaAAAAIAAJ" },
+  { es: "La metamorfosis", en: "The Metamorphosis", author: "Franz Kafka", cover: "https://books.google.com/books/content?id=2vRJzgEACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_Metamorfosis/2vRJzgEACAAJ" },
+  { es: "Carta al padre", en: "Letter to His Father", author: "Franz Kafka", cover: "https://books.google.com/books/content?id=kwtbPgAACAAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/_/kwtbPgAACAAJ" },
+  { es: "20.000 leguas de viaje submarino", en: "Twenty Thousand Leagues Under the Sea", author: "Jules Verne", cover: "https://books.google.com/books/content?id=18pVi-3IbK0C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/20000_de_viaje_submarino/18pVi-3IbK0C" },
+  { es: "La vuelta al mundo en 80 días", en: "Around the World in Eighty Days", author: "Jules Verne", cover: "https://books.google.com/books/content?id=C6hbLtrHJJ8C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_vuelta_al_mundo_en_80_d%C3%ADas/C6hbLtrHJJ8C" },
+  { es: "La isla misteriosa", en: "The Mysterious Island", author: "Jules Verne", cover: "https://books.google.com/books/content?id=1eAeEAAAQBAJ&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/La_isla_misteriosa/1eAeEAAAQBAJ" },
+  { es: "Alrededor de la luna", en: "Around the Moon", author: "Jules Verne", cover: "https://books.google.com/books/content?id=MagrmewmILMC&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/Alrededor_de_la_luna/MagrmewmILMC" },
+  { es: "El viejo y el mar", en: "The Old Man and the Sea", author: "Ernest Hemingway", cover: "https://books.google.com/books/content?id=FlDehedEjV4C&printsec=frontcover&img=1&zoom=1", url: "https://www.google.com/books/edition/El_viejo_y_el_mar/FlDehedEjV4C" },
 ];
 
 const cubeLabels = {
@@ -174,26 +196,29 @@ const cubeLabels = {
     </div>
     <div class="shelf">
       {
-        books.map((b) => (
-          <a
-            class="book"
-            href={b.url || undefined}
-            target={b.url ? "_blank" : undefined}
-            rel="noopener"
-          >
-            <div class="bcover">
-              {b.cover ? (
-                <img src={b.cover} alt={b.title} loading="lazy" />
-              ) : (
-                <div class="img-empty mono">book</div>
-              )}
-            </div>
-            <div class="bcap mono">
-              <b>{b.title}</b>
-              {b.author}
-            </div>
-          </a>
-        ))
+        books.map((b) => {
+          const title = lang === "es" ? b.es : b.en;
+          return (
+            <a
+              class="book"
+              href={b.url || undefined}
+              target={b.url ? "_blank" : undefined}
+              rel="noopener"
+            >
+              <div class="bcover">
+                {b.cover ? (
+                  <img src={b.cover} alt={title} loading="lazy" />
+                ) : (
+                  <div class="img-empty mono">book</div>
+                )}
+              </div>
+              <div class="bcap mono">
+                <b>{title}</b>
+                {b.author}
+              </div>
+            </a>
+          );
+        })
       }
     </div>
   </section>
