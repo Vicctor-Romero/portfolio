@@ -20,29 +20,25 @@ const escapeHtml = (s: string) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
   );
 
-// Only accept submissions that originate from our own site (blocks naive
-// direct POSTs from scripts that never loaded the form).
-const originAllowed = (request: Request) => {
-  const src =
-    request.headers.get("origin") || request.headers.get("referer") || "";
+// Block only clear cross-origin POSTs: the Origin/Referer host must match the
+// host the request was actually sent to (domain-agnostic, works on any domain).
+// If neither header is present we can't tell, so we let it through — the
+// honeypot + time-trap still cover scripted posts.
+const isCrossOrigin = (request: Request) => {
+  const src = request.headers.get("origin") || request.headers.get("referer");
+  const host = request.headers.get("host");
+  if (!src || !host) return false;
   try {
-    const h = new URL(src).hostname;
-    return (
-      h === "victorromero.dev" ||
-      h.endsWith(".victorromero.dev") ||
-      h.endsWith(".netlify.app") ||
-      h === "localhost" ||
-      h === "127.0.0.1"
-    );
+    return new URL(src).host !== host;
   } catch {
-    return false;
+    return true;
   }
 };
 
 const countLinks = (s: string) => (s.match(/https?:\/\/|www\./gi) || []).length;
 
 export const POST: APIRoute = async ({ request }) => {
-  if (!originAllowed(request)) {
+  if (isCrossOrigin(request)) {
     return json({ ok: false, error: "forbidden" }, 403);
   }
 
