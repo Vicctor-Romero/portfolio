@@ -65,6 +65,17 @@ const channels = [
             <label class="mono">--message</label>
             <textarea name="message" rows="4" placeholder={t("contact.ph.message")} required></textarea>
           </div>
+          <!-- honeypot: hidden from humans; bots fill it and get silently dropped -->
+          <div class="hp" aria-hidden="true">
+            <label
+              >Company<input
+                type="text"
+                name="company"
+                tabindex="-1"
+                autocomplete="off"
+              /></label
+            >
+          </div>
           <div class="formfoot">
             <button class="send mono" type="submit">{t("contact.send")}</button>
             <span
@@ -89,6 +100,7 @@ const channels = [
   const note = document.getElementById("fnote");
   if (form && note) {
     const msg = (k: string) => note.dataset[k] || "";
+    const startedAt = Date.now(); // time-trap: real users take a few seconds
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const fd = new FormData(form);
@@ -96,6 +108,8 @@ const channels = [
         name: String(fd.get("name") || "").trim(),
         email: String(fd.get("email") || "").trim(),
         message: String(fd.get("message") || "").trim(),
+        company: String(fd.get("company") || ""), // honeypot (should stay empty)
+        elapsed: Date.now() - startedAt,
       };
       note.textContent = msg("sending");
       note.classList.remove("ok", "err");
@@ -347,6 +361,15 @@ const channels = [
   }
   .formnote.err {
     color: #ff5a6b;
+  }
+
+  /* honeypot — kept in the layout flow but off-screen so bots still see it */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   @media (max-width: 860px) {

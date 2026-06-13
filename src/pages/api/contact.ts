@@ -3,12 +3,11 @@ import type { APIRoute } from "astro";
 // On-demand (server) route — must not be prerendered.
 export const prerender = false;
 
-const TO = "vmrbaez@gmail.com";
-// Resend requires the `from` address to be on a domain verified in your
-// Resend account. `onboarding@resend.dev` works out of the box but only
-// delivers to your own account email — switch CONTACT_FROM to a verified
-// domain (e.g. "Victor Romero <contact@vicctor-romero.com>") for production.
-const FROM = process.env.CONTACT_FROM || "Victor Romero Portfolio <onboarding@resend.dev>";
+// All configuration comes from env vars (.env locally, Netlify env in prod):
+//   RESEND_API_KEY — Resend API key (required; the form returns "not_configured" without it)
+//   CONTACT_FROM   — sender address; must be on a domain verified in Resend
+//                    (use onboarding@resend.dev until your domain is verified)
+//   CONTACT_TO     — where contact messages are delivered
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -21,7 +20,32 @@ const escapeHtml = (s: string) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
   );
 
+// Only accept submissions that originate from our own site (blocks naive
+// direct POSTs from scripts that never loaded the form).
+const originAllowed = (request: Request) => {
+  const src =
+    request.headers.get("origin") || request.headers.get("referer") || "";
+  try {
+    const h = new URL(src).hostname;
+    return (
+      h === "victorromero.dev" ||
+      h.endsWith(".victorromero.dev") ||
+      h.endsWith(".netlify.app") ||
+      h === "localhost" ||
+      h === "127.0.0.1"
+    );
+  } catch {
+    return false;
+  }
+};
+
+const countLinks = (s: string) => (s.match(/https?:\/\/|www\./gi) || []).length;
+
 export const POST: APIRoute = async ({ request }) => {
+  if (!originAllowed(request)) {
+    return json({ ok: false, error: "forbidden" }, 403);
+  }
+
   let data: Record<string, unknown>;
   try {
     data = await request.json();
@@ -40,18 +64,75 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: false, error: "invalid_email" }, 400);
   }
 
-  const apiKey = process.env.RESEND_API_KEY || import.meta.env.RESEND_API_KEY;
+  // Silent anti-spam: return ok:true (without sending) so bots think they
+  // succeeded and don't adapt or retry.
+  //   honeypot filled · submitted too fast · link-stuffed message/name
+  const honeypot = String(data.company ?? "").trim();
+  const elapsed = Number(data.elapsed);
+  if (
+    honeypot !== "" ||
+    !Number.isFinite(elapsed) ||
+    elapsed < 3000 ||
+    countLinks(message) >= 4 ||
+    /https?:\/\//i.test(name)
+  ) {
+    console.warn("[contact] dropped suspected spam");
+    return json({ ok: true });
+  }
+
+  const apiKey = process.env.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
+  const FROM =
+    process.env.CONTACT_FROM ??
+    import.meta.env.CONTACT_FROM ??
+    "Victor Romero Portfolio <onboarding@resend.dev>";
+  const TO =
+    process.env.CONTACT_TO ?? import.meta.env.CONTACT_TO ?? "vmrbaez@gmail.com";
   if (!apiKey) {
     console.error("[contact] RESEND_API_KEY is not set");
     return json({ ok: false, error: "not_configured" }, 500);
   }
 
-  const html = `
-    <h2>New portfolio message</h2>
-    <p><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>
-    <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
-  `;
-  const text = `New portfolio message\nFrom: ${name} <${email}>\n\n${message}`;
+  const n = escapeHtml(name);
+  const e = escapeHtml(email);
+  const m = escapeHtml(message);
+  const mono =
+    "'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace";
+  const line = "1px solid rgba(255,255,255,.08)";
+  const label = `color:#3bff88;font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 6px;`;
+
+  const html = `<div style="background:#08090a;padding:32px 16px;font-family:${mono};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#0b0d0e;border:1px solid rgba(255,255,255,.14);">
+        <tr><td style="padding:13px 16px;border-bottom:${line};">
+          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#3bff88;"></span>
+          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#41464a;margin-left:6px;"></span>
+          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#41464a;margin-left:6px;"></span>
+          <span style="color:#6b716e;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-left:12px;">~ / new_message</span>
+        </td></tr>
+        <tr><td style="padding:28px 24px;">
+          <div style="color:#3bff88;font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px;">// incoming transmission</div>
+          <div style="margin-bottom:20px;">
+            <p style="${label}">--name</p>
+            <div style="color:#ededea;font-size:16px;">${n}</div>
+          </div>
+          <div style="margin-bottom:20px;padding-top:16px;border-top:${line};">
+            <p style="${label}">--email</p>
+            <a href="mailto:${e}" style="color:#ededea;font-size:16px;text-decoration:none;">${e}</a>
+          </div>
+          <div style="padding-top:16px;border-top:${line};">
+            <p style="${label}">--message</p>
+            <div style="color:#b9bdba;font-size:15px;line-height:1.65;white-space:pre-wrap;">${m}</div>
+          </div>
+        </td></tr>
+        <tr><td style="padding:12px 16px;border-top:${line};color:#41464a;font-size:10px;letter-spacing:.1em;text-transform:uppercase;">
+          sent from victorromero.dev · contact form
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</div>`;
+  const text = `// new_message\n\n--name\n${name}\n\n--email\n${email}\n\n--message\n${message}\n\n— sent from victorromero.dev`;
 
   try {
     const res = await fetch("https://api.resend.com/emails", {
