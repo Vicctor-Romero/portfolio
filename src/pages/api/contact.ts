@@ -81,10 +81,9 @@ export const POST: APIRoute = async ({ request }) => {
     process.env.CONTACT_FROM ??
     import.meta.env.CONTACT_FROM ??
     "Victor Romero Portfolio <onboarding@resend.dev>";
-  const TO =
-    process.env.CONTACT_TO ?? import.meta.env.CONTACT_TO ?? "vmrbaez@gmail.com";
-  if (!apiKey) {
-    console.error("[contact] RESEND_API_KEY is not set");
+  const TO = process.env.CONTACT_TO ?? import.meta.env.CONTACT_TO;
+  if (!apiKey || !TO) {
+    console.error("[contact] RESEND_API_KEY or CONTACT_TO is not set");
     return json({ ok: false, error: "not_configured" }, 500);
   }
 

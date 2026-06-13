@@ -1,0 +1,5 @@
+# CONTACT_FROM (a sender name) and CONTACT_TO (the destination email) are not
+# real secrets, so exclude them from Netlify's secrets scanning. RESEND_API_KEY
+# stays scanned.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "CONTACT_FROM,CONTACT_TO"
