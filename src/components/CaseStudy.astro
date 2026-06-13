@@ -1,0 +1,303 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+interface Props {
+  entry: CollectionEntry<"projects">;
+}
+const { entry } = Astro.props;
+const p = entry.data;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const projectsPath = lang === "es" ? "/es/projects" : "/projects";
+
+const { Content } = await render(entry);
+---
+
+<main class="page">
+  <nav class="crumb mono">
+    <a href={projectsPath}>{t("nav.projects")}</a>
+    <span>/</span>
+    <span class="cur">{p.title}</span>
+  </nav>
+
+  <div class="pagehead">
+    <div class="kicker mono">
+      <span class="ln"></span>{p.num} — {p.category}
+      {p.status && <span class="status">· {p.status}</span>}
+    </div>
+    <h1 class="display"><span class="row" data-decode>{p.title}</span></h1>
+  </div>
+
+  <div class="meta">
+    <div class="role mono">
+      <span class="pill">{p.rolePill}</span>
+      {p.roleMeta}
+    </div>
+    {
+      p.visit && (
+        <a class="visit mono" href={p.visit.url} target="_blank" rel="noopener">
+          {p.visit.label} →
+        </a>
+      )
+    }
+  </div>
+
+  <p class="lead">{p.summary}</p>
+
+  <div class="ptags mono">
+    {p.tags.map((tag) => <span>{tag}</span>)}
+  </div>
+
+  {
+    p.cover && (
+      <figure class="hero">
+        <span class="tag mono">{`[${p.num}] ${p.title.toUpperCase()}`}</span>
+        <img src={p.cover} alt={p.coverAlt ?? p.title} loading="eager" />
+      </figure>
+    )
+  }
+
+  <article class="prose">
+    <Content />
+  </article>
+
+  {
+    p.gallery && p.gallery.length > 0 && (
+      <section class="gallery">
+        {p.gallery.map((g) => (
+          <figure class="shot">
+            <img src={g.src} alt={g.alt} loading="lazy" />
+            {g.caption && <figcaption class="mono">{g.caption}</figcaption>}
+          </figure>
+        ))}
+      </section>
+    )
+  }
+
+  <div class="backrow">
+    <a class="back mono" href={projectsPath}>← {t("nav.projects")}</a>
+  </div>
+</main>
+
+<style>
+  .crumb {
+    display: flex;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 8px;
+  }
+  .crumb a:hover {
+    color: var(--accent);
+  }
+  .crumb .cur {
+    color: var(--ink);
+  }
+  .kicker .status {
+    color: var(--accent);
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .role {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .role .pill {
+    border: 1px solid var(--line);
+    padding: 4px 8px;
+    color: var(--ink);
+  }
+  .visit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 3px;
+    transition: all 0.2s;
+  }
+  .visit:hover {
+    border-color: var(--accent);
+    gap: 14px;
+  }
+
+  .lead {
+    margin-top: 22px;
+    max-width: 640px;
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.65;
+    color: #cdd1ce;
+  }
+
+  .ptags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 20px;
+  }
+  .ptags span {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    padding: 5px 9px;
+  }
+
+  .hero {
+    position: relative;
+    margin: 34px 0 0;
+    max-width: 820px;
+    border: 1px solid var(--line);
+    background: #0b0d0e;
+    overflow: hidden;
+  }
+  .hero::before,
+  .hero::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    opacity: 0.6;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .hero::before {
+    top: 10px;
+    left: 10px;
+    border-top: 1.5px solid var(--accent);
+    border-left: 1.5px solid var(--accent);
+  }
+  .hero::after {
+    bottom: 10px;
+    right: 10px;
+    border-bottom: 1.5px solid var(--accent);
+    border-right: 1.5px solid var(--accent);
+  }
+  .hero .tag {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--dimmer);
+    z-index: 3;
+  }
+  .hero img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .prose {
+    max-width: 680px;
+    margin: 40px 0 0;
+  }
+  .prose :global(h2) {
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 38px 0 14px;
+    color: var(--ink);
+  }
+  .prose :global(h2::before) {
+    content: "// ";
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    vertical-align: middle;
+  }
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .prose :global(p) {
+    font-size: 15.5px;
+    line-height: 1.78;
+    color: #b3b7b4;
+    margin: 0 0 18px;
+  }
+  .prose :global(strong) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose :global(ul) {
+    margin: 0 0 18px;
+    padding-left: 18px;
+  }
+  .prose :global(li) {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #b3b7b4;
+    margin-bottom: 8px;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .shot {
+    margin: 0;
+    border: 1px solid var(--line);
+    background: #0b0d0e;
+    overflow: hidden;
+  }
+  .shot img {
+    width: 100%;
+    display: block;
+  }
+  .shot figcaption {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 9px 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .backrow {
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .back {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.2s;
+  }
+  .back:hover {
+    color: var(--accent);
+  }
+</style>

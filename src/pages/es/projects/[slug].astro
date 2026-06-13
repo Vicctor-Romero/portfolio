@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import CaseStudy from "../../../components/CaseStudy.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects", (e) => e.id.startsWith("es/"));
+  return entries.map((entry) => ({
+    params: { slug: entry.id.replace(/^es\//, "") },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<MainLayout title={`${entry.data.title} — Victor Romero`}>
+  <CaseStudy entry={entry} />
+</MainLayout>

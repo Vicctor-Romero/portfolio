@@ -34,7 +34,7 @@ export const getProjects = (
             listMeta: t("proj.glidocs.listMeta"),
             description: t("proj.glidocs.desc"),
             tags: ["Next.js", "NestJS", "PostgreSQL", "React Native", "TypeScript"],
-            href: "#",
+            href: getLocalizedPath("/projects/glidocs"),
             visit: { label: "glidocs.com", url: "https://glidocs.com" },
             comingSoon: false,
             image: 'https://image.thum.io/get/width/1200/crop/900/https://glidocs.com',
