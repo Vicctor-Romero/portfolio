@@ -265,4 +265,28 @@ const cubeLabels = {
       grid-template-columns: 1fr;
     }
   }
+
+  /* orb + glass polish: rounded frames, no HUD corners, readable sizes */
+  .role .pill,
+  .ptags span {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .pmedia {
+    border-radius: 22px;
+    overflow: hidden;
+    border-color: var(--line2);
+  }
+  .pmedia::before,
+  .pmedia::after,
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+  .pdesc {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #d2d2d7;
+  }
 </style>

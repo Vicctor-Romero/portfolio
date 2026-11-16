@@ -69,7 +69,6 @@ const count = String(projects.length).padStart(2, "0");
             </div>
 
             <div class="pmedia">
-              <span class="tag mono">{p.tag}</span>
               {p.image ? (
                 <img src={p.image} alt={p.title} loading="lazy" />
               ) : (
@@ -81,6 +80,10 @@ const count = String(projects.length).padStart(2, "0");
       ))
     }
   </section>
+
+  <a class="extra glass" href={getLocalizedPath("/projects/rubiks-cube-3d")}>
+    <span>{t("projects.extra")}</span><b>→</b>
+  </a>
 </main>
 
 <style>
@@ -362,5 +365,47 @@ const count = String(projects.length).padStart(2, "0");
     .pmedia {
       order: -1;
     }
+  }
+
+  /* orb + glass polish: rounded frames, no HUD corners, readable sizes */
+  .role .pill,
+  .ptags span {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .pmedia,
+  .hero {
+    border-radius: 22px;
+    overflow: hidden;
+    border-color: var(--line2);
+  }
+  .pmedia::before,
+  .pmedia::after,
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+  .pdesc {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #d2d2d7;
+  }
+  .extra {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    border-radius: 22px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .extra b {
+    transition: transform 0.3s var(--ease);
+  }
+  .extra:hover b {
+    transform: translateX(5px);
   }
 </style>

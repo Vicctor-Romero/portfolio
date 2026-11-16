@@ -410,11 +410,11 @@ export default function InteractiveCube({
   }, []);
 
   const btn: React.CSSProperties = {
-    fontFamily: '"JetBrains Mono", monospace',
-    fontSize: "11px",
-    letterSpacing: "0.14em",
-    textTransform: "uppercase",
-    padding: "11px 18px",
+    fontFamily: "inherit",
+    fontSize: "15px",
+    fontWeight: 700,
+    padding: "11px 20px",
+    borderRadius: "999px",
     cursor: "pointer",
     background: "transparent",
     transition: "all .2s",
@@ -429,8 +429,10 @@ export default function InteractiveCube({
           aspectRatio: "1",
           width: "100%",
           maxWidth: "440px",
-          border: "1px solid var(--line)",
-          background: "#0b0d0e",
+          borderRadius: "28px",
+          overflow: "hidden",
+          border: "1px solid var(--line2)",
+          background: "rgba(255,255,255,.04)",
           touchAction: "none",
         }}
       >
@@ -438,20 +440,6 @@ export default function InteractiveCube({
           <ambientLight intensity={5} />
           <RubiksCube ref={cubeRef} onSolvedChange={setSolved} />
         </Canvas>
-        <span
-          style={{
-            position: "absolute",
-            top: "9px",
-            left: "9px",
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: "9px",
-            letterSpacing: "0.16em",
-            color: "var(--dimmer)",
-            pointerEvents: "none",
-          }}
-        >
-          [ CUBE.EXE ]
-        </span>
       </div>
 
       <div
@@ -463,26 +451,26 @@ export default function InteractiveCube({
         }}
       >
         <button
-          style={{ ...btn, border: "1px solid var(--accent)", color: "var(--accent)" }}
+          style={{ ...btn, border: "1px solid var(--ink)", color: "var(--ink)" }}
           onMouseEnter={(e) => {
-            (e.currentTarget.style.background = "var(--accent)"),
-              (e.currentTarget.style.color = "#05140b");
+            (e.currentTarget.style.background = "var(--ink)"),
+              (e.currentTarget.style.color = "#000");
           }}
           onMouseLeave={(e) => {
             (e.currentTarget.style.background = "transparent"),
-              (e.currentTarget.style.color = "var(--accent)");
+              (e.currentTarget.style.color = "var(--ink)");
           }}
           onClick={() => cubeRef.current?.scramble()}
         >
           {labels.scramble}
         </button>
         <button
-          style={{ ...btn, border: "1px solid var(--line)", color: "var(--ink)" }}
+          style={{ ...btn, border: "1px solid var(--line2)", color: "var(--ink)" }}
           onMouseEnter={(e) =>
             (e.currentTarget.style.borderColor = "var(--ink)")
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.borderColor = "var(--line)")
+            (e.currentTarget.style.borderColor = "var(--line2)")
           }
           onClick={() => cubeRef.current?.reset()}
         >
@@ -491,14 +479,12 @@ export default function InteractiveCube({
         <span
           style={{
             marginLeft: "auto",
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: "11px",
-            letterSpacing: "0.12em",
-            color: solved ? "var(--accent)" : "var(--dim)",
+            fontSize: "14px",
+            color: "var(--dim)",
           }}
         >
           {labels.status}:{" "}
-          <b style={{ color: solved ? "var(--accent)" : "var(--ink)" }}>
+          <b style={{ color: solved ? "#30d158" : "var(--ink)" }}>
             {solved ? labels.solved : labels.scrambled}
           </b>
         </span>

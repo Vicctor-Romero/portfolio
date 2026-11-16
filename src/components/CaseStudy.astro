@@ -53,7 +53,6 @@ const { Content } = await render(entry);
   {
     p.cover && (
       <figure class="hero">
-        <span class="tag mono">{`[${p.num}] ${p.title.toUpperCase()}`}</span>
         <img src={p.cover} alt={p.coverAlt ?? p.title} loading="eager" />
       </figure>
     )
@@ -299,5 +298,30 @@ const { Content } = await render(entry);
   }
   .back:hover {
     color: var(--accent);
+  }
+
+  /* orb + glass polish: rounded frames, no HUD corners, readable sizes */
+  .role .pill,
+  .ptags span {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .pmedia,
+  .hero {
+    border-radius: 22px;
+    overflow: hidden;
+    border-color: var(--line2);
+  }
+  .pmedia::before,
+  .pmedia::after,
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+  .pdesc {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #d2d2d7;
   }
 </style>

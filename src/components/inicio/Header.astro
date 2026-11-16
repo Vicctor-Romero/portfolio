@@ -28,6 +28,7 @@ const links = [
 ---
 
 <header class="nav">
+  <div class="navbar glass">
   <a class="brand" href={lang === "es" ? "/es" : "/"}>
     <img
       class="logo"
@@ -36,7 +37,7 @@ const links = [
       onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
     />
     <span class="fallback" style="display:none">VR</span>
-    <span class="who"><b>Victor Romero</b><span>SOFTWARE ENGINEER</span></span>
+    <b>Victor Romero</b>
   </a>
 
   <nav class="navlinks">
@@ -53,15 +54,19 @@ const links = [
   </nav>
 
   <div class="navright">
-    <a href={nextUrl} class="lang mono" aria-label="Switch language">
+    <a href={nextUrl} class="lang" aria-label="Switch language">
       <span class:list={[lang === "en" ? "text-ink" : "text-dim"]}>EN</span>
       <b>/</b>
       <span class:list={[lang === "es" ? "text-ink" : "text-dim"]}>ES</span>
     </a>
-    <a class="btn" href={getLocalizedPath("/contact")}>
-      <span class="dot"></span>{t("nav.cta")}
-    </a>
-    <button id="navtoggle" class="navtoggle" aria-label="Toggle menu">
+    <a class="btn" href={getLocalizedPath("/contact")}>{t("nav.cta")}</a>
+    <button
+      id="navtoggle"
+      class="navtoggle"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobilemenu"
+    >
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
@@ -71,9 +76,10 @@ const links = [
       </svg>
     </button>
   </div>
+  </div>
 
-  <!-- mobile menu -->
-  <div id="mobilemenu" class="mobilemenu">
+  <!-- mobile menu (sibling of the bar so its own glass can blur the page) -->
+  <div id="mobilemenu" class="mobilemenu glass">
     <nav>
       {
         links.map((l) => (
@@ -99,6 +105,7 @@ const links = [
   function setOpen(v: boolean) {
     open = v;
     menu?.classList.toggle("open", open);
+    btn?.setAttribute("aria-expanded", String(open));
     icon?.setAttribute("d", open ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16");
   }
 

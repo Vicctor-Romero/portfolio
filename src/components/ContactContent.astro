@@ -5,92 +5,98 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const channels = [
-  { id: "01", label: "GitHub", handle: "vicctor-romero", url: "https://github.com/vicctor-romero" },
-  { id: "02", label: "LinkedIn", handle: "vicctor-romero", url: "https://linkedin.com/in/vicctor-romero" },
-  { id: "03", label: "X / Twitter", handle: "@vicctor_romero", url: "https://twitter.com/vicctor_romero" },
+  { label: "GitHub", url: "https://github.com/vicctor-romero" },
+  { label: "LinkedIn", url: "https://linkedin.com/in/vicctor-romero" },
+  { label: "X", url: "https://twitter.com/vicctor_romero" },
 ];
 ---
 
 <main class="page">
   <div class="pagehead">
-    <div class="kicker mono"><span class="ln"></span>{t("contact.kicker")}</div>
+    <div class="kicker"><span class="blip"></span>{t("contact.kicker")}</div>
     <h1 class="display">
-      <span class="row" data-decode>{t("contact.h1a")}</span>
-      <span class="row stroked" data-decode>{t("contact.h1b")}</span>
+      <span class="row">{t("contact.h1a")}</span>
+      <span class="row stroked">{t("contact.h1b")}</span>
     </h1>
   </div>
 
   <section class="contact">
-    <!-- left -->
-    <div>
+    <div class="intro">
       <p class="clead">{t("contact.lead")}</p>
+      <p class="avail">{t("contact.avail")}</p>
+    </div>
 
-      <ul class="channels">
+    <form id="cform" class="form glass reveal">
+      <div class="field">
+        <label for="f-name">{t("contact.form.name")}</label>
+        <input
+          id="f-name"
+          type="text"
+          name="name"
+          autocomplete="name"
+          placeholder={t("contact.ph.name")}
+          required
+        />
+      </div>
+      <div class="field">
+        <label for="f-email">{t("contact.form.email")}</label>
+        <input
+          id="f-email"
+          type="email"
+          name="email"
+          autocomplete="email"
+          inputmode="email"
+          placeholder={t("contact.ph.email")}
+          required
+        />
+      </div>
+      <div class="field">
+        <label for="f-message">{t("contact.form.message")}</label>
+        <textarea
+          id="f-message"
+          name="message"
+          rows="5"
+          placeholder={t("contact.ph.message")}
+          required></textarea>
+      </div>
+      <!-- honeypot: hidden from humans; bots fill it and get silently dropped -->
+      <div class="hp" aria-hidden="true">
+        <label
+          >Company<input
+            type="text"
+            name="company"
+            tabindex="-1"
+            autocomplete="off"
+          /></label
+        >
+      </div>
+      <button class="btn big glow send" type="submit">{t("contact.send")}</button>
+      <p
+        class="formnote"
+        id="fnote"
+        role="status"
+        data-default={t("contact.note.default")}
+        data-sending={t("contact.note.sending")}
+        data-ok={t("contact.note.ok")}
+        data-error={t("contact.note.error")}
+      >
+        {t("contact.note.default")}
+      </p>
+    </form>
+
+    <div class="also">
+      <p>{t("contact.also")}</p>
+      <ul>
         {
           channels.map((c) => (
             <li>
-              <a href={c.url} target="_blank" rel="noopener">
-                <span class="ci mono">{c.id}</span>
-                <span class="cl mono">{c.label}</span>
-                <span class="ch">{c.handle}</span>
-                <span class="carr mono">↗</span>
+              <a class="glass" href={c.url} target="_blank" rel="noopener">
+                {c.label} <span>↗</span>
               </a>
             </li>
           ))
         }
       </ul>
-
-      <div class="avail mono">
-        <span class="blip"></span>{t("contact.avail")}
-      </div>
-    </div>
-
-    <!-- right: terminal form -->
-    <div class="termbox">
-      <div class="termbar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="t mono">{t("contact.terminal")}</span>
-      </div>
-      <div class="termbody">
-        <form id="cform">
-          <div class="field">
-            <label class="mono">--name</label>
-            <input type="text" name="name" placeholder={t("contact.ph.name")} required />
-          </div>
-          <div class="field">
-            <label class="mono">--email</label>
-            <input type="email" name="email" placeholder={t("contact.ph.email")} required />
-          </div>
-          <div class="field">
-            <label class="mono">--message</label>
-            <textarea name="message" rows="4" placeholder={t("contact.ph.message")} required></textarea>
-          </div>
-          <!-- honeypot: hidden from humans; bots fill it and get silently dropped -->
-          <div class="hp" aria-hidden="true">
-            <label
-              >Company<input
-                type="text"
-                name="company"
-                tabindex="-1"
-                autocomplete="off"
-              /></label
-            >
-          </div>
-          <div class="formfoot">
-            <button class="send mono" type="submit">{t("contact.send")}</button>
-            <span
-              class="formnote mono"
-              id="fnote"
-              data-default={t("contact.note.default")}
-              data-sending={t("contact.note.sending")}
-              data-ok={t("contact.note.ok")}
-              data-error={t("contact.note.error")}
-            >
-              {t("contact.note.default")}
-            </span>
-          </div>
-        </form>
-      </div>
     </div>
   </section>
 </main>
@@ -138,229 +144,74 @@ const channels = [
 <style>
   .contact {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(36px, 6vw, 88px);
-    align-items: start;
-    margin-top: 8px;
+    gap: 28px;
     padding-bottom: 20px;
   }
   .clead {
-    font-size: clamp(16px, 1.3vw, 19px);
-    line-height: 1.6;
-    color: #b9bdba;
-    max-width: 420px;
+    font-size: clamp(1.0625rem, 4.4vw, 1.3rem);
+    line-height: 1.5;
+    color: #d2d2d7;
+    max-width: 34ch;
   }
-  .emailrow {
-    margin: 34px 0 8px;
-  }
-  .emaillabel {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--dimmer);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .email {
-    font-size: clamp(1.3rem, 2.6vw, 2.1rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--ink);
-    transition: color 0.2s;
-  }
-  .email:hover {
-    color: var(--accent);
-  }
-  .email .arr {
-    font-size: 1rem;
-    color: var(--accent);
-    transition: transform 0.2s;
-  }
-  .email:hover .arr {
-    transform: translateX(5px);
-  }
-
-  .channels {
-    list-style: none;
-    margin-top: 38px;
-    border-top: 1px solid var(--line);
-  }
-  .channels li a {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--line);
-    transition: all 0.22s;
-  }
-  .channels li a:hover {
-    padding-left: 12px;
-  }
-  .channels .ci {
-    font-size: 10px;
-    color: var(--accent);
-    width: 26px;
-  }
-  .channels .cl {
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--dim);
-    width: 90px;
-  }
-  .channels .ch {
-    font-size: 15px;
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .channels .carr {
-    margin-left: auto;
-    color: var(--dimmer);
-    transition: all 0.2s;
-  }
-  .channels li a:hover .carr {
-    color: var(--accent);
-    transform: translate(2px, -2px);
-  }
-  .channels li a:hover .ch {
-    color: var(--accent);
-  }
-
   .avail {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 30px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
+    margin-top: 14px;
+    font-size: 0.9375rem;
     color: var(--dim);
-  }
-  .avail .blip {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 0 0 var(--accent);
-    animation: blip 1.6s ease-out infinite;
-    flex-shrink: 0;
-  }
-  @keyframes blip {
-    0% {
-      box-shadow: 0 0 0 0 rgba(59, 255, 136, 0.5);
-    }
-    100% {
-      box-shadow: 0 0 0 10px rgba(59, 255, 136, 0);
-    }
   }
 
-  /* terminal form */
-  .termbox {
-    border: 1px solid var(--line2);
-    background: linear-gradient(180deg, #0c0e10, #0a0b0c);
-  }
-  .termbar {
+  .form {
+    padding: 26px 22px 24px;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 14px;
-    border-bottom: 1px solid var(--line);
-  }
-  .termbar .dots {
-    display: flex;
-    gap: 6px;
-  }
-  .termbar .dots i {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--dimmer);
-  }
-  .termbar .dots i:first-child {
-    background: var(--accent);
-  }
-  .termbar .t {
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    color: var(--dim);
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .termbody {
-    padding: 26px clamp(20px, 3vw, 32px) 28px;
-  }
-  .field {
-    border-bottom: 1px solid var(--line);
-    padding: 16px 0;
-    transition: border-color 0.2s;
-  }
-  .field:focus-within {
-    border-color: var(--accent);
+    flex-direction: column;
+    gap: 18px;
   }
   .field label {
     display: block;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 9px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 8px;
   }
   .field input,
   .field textarea {
     width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
+    /* 16px+ so iOS does not zoom the page on focus */
+    font: 500 17px/1.45 var(--font-display);
     color: var(--ink);
-    font-family: var(--font-display);
-    font-size: 17px;
-    resize: none;
-    line-height: 1.5;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--line2);
+    border-radius: 16px;
+    padding: 14px 16px;
+    resize: vertical;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
   }
   .field input::placeholder,
   .field textarea::placeholder {
     color: var(--dimmer);
   }
-  .formfoot {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 24px;
-    flex-wrap: wrap;
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+    background: rgba(0, 0, 0, 0.5);
   }
   .send {
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    background: var(--accent);
-    color: #05140b;
-    font-weight: 500;
-    border: none;
-    padding: 14px 26px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .send:hover {
-    box-shadow: 0 0 30px -6px var(--accent);
-    transform: translateY(-2px);
+    width: 100%;
+    margin-top: 6px;
   }
   .formnote {
-    font-size: 10.5px;
-    letter-spacing: 0.06em;
+    text-align: center;
+    font-size: 0.9375rem;
     color: var(--dim);
   }
   .formnote.ok {
-    color: var(--accent);
+    color: #30d158;
+    font-weight: 600;
   }
   .formnote.err {
-    color: #ff5a6b;
+    color: #ff6b7d;
+    font-weight: 600;
   }
 
   /* honeypot — kept in the layout flow but off-screen so bots still see it */
@@ -372,10 +223,39 @@ const channels = [
     overflow: hidden;
   }
 
-  @media (max-width: 860px) {
+  .also p {
+    font-size: 0.9375rem;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+  .also ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .also a {
+    display: inline-flex;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .also a span {
+    color: var(--dim);
+  }
+
+  @media (min-width: 860px) {
     .contact {
-      grid-template-columns: 1fr;
-      gap: 44px;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px clamp(36px, 6vw, 88px);
+      align-items: start;
+    }
+    .form {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      padding: 34px 32px 30px;
     }
   }
 </style>

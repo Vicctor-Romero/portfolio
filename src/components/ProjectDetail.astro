@@ -58,7 +58,6 @@ const project = getProjects(t, getLocalizedPath).find((p) => p.id === projectId)
     </div>
 
     <div class="pmedia">
-      <span class="tag mono">{project.tag}</span>
       {
         project.image ? (
           <img src={project.image} alt={project.title} loading="lazy" />
@@ -234,5 +233,30 @@ const project = getProjects(t, getLocalizedPath).find((p) => p.id === projectId)
     .pmedia {
       order: -1;
     }
+  }
+
+  /* orb + glass polish: rounded frames, no HUD corners, readable sizes */
+  .role .pill,
+  .ptags span {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .pmedia,
+  .hero {
+    border-radius: 22px;
+    overflow: hidden;
+    border-color: var(--line2);
+  }
+  .pmedia::before,
+  .pmedia::after,
+  .hero::before,
+  .hero::after {
+    display: none;
+  }
+  .pdesc {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #d2d2d7;
   }
 </style>

@@ -1,14 +1,12 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import Hero from "../../components/inicio/Hero.astro";
-import HomeFooter from "../../components/inicio/HomeFooter.astro";
+import Home from "../../components/inicio/Home.astro";
 import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<MainLayout title={t("home.title")}>
-  <Hero />
-  <HomeFooter slot="footer" />
+<MainLayout title={t("home.title")} home>
+  <Home />
 </MainLayout>
