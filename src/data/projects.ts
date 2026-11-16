@@ -15,7 +15,8 @@ export interface ProjectData {
     /** external visit link, or null when none */
     visit: { label: string; url: string } | null;
     comingSoon: boolean;
-    /** screenshot for the Projects media frame */
+    /** local screenshot in public/projects (the thum.io live service now
+     *  answers "Image not authorized", so these are captured once by hand) */
     image: string | null;
     tag: string;          // media corner tag, e.g. "[01] GLIDOCS"
 }
@@ -37,7 +38,7 @@ export const getProjects = (
             href: getLocalizedPath("/projects/glidocs"),
             visit: { label: "glidocs.com", url: "https://glidocs.com" },
             comingSoon: false,
-            image: 'https://image.thum.io/get/width/1200/crop/900/https://glidocs.com',
+            image: "/projects/glidocs.jpg",
             tag: "[01] GLIDOCS",
         },
         {
@@ -51,9 +52,9 @@ export const getProjects = (
             description: t("proj.bullseye.desc"),
             tags: ["React", "Astro", "Responsive", "SEO"],
             href: getLocalizedPath("/projects/thebullseyebuilders"),
-            visit: { label: "thebullseyebuilders.com", url: "https://thebullseyebuilders.com" },
+            visit: { label: "bullseyebuildersjh.com", url: "https://bullseyebuildersjh.com" },
             comingSoon: false,
-            image: "https://image.thum.io/get/width/1200/crop/900/https://thebullseyebuilders.com",
+            image: "/projects/bullseye.jpg",
             tag: "[02] BULLSEYE",
         },
         {
@@ -69,7 +70,23 @@ export const getProjects = (
             href: getLocalizedPath("/projects/5starcare"),
             visit: { label: "5starcaregiving.com", url: "https://5starcaregiving.com" },
             comingSoon: false,
-            image: "https://image.thum.io/get/width/1200/crop/900/https://5starcaregiving.com",
+            image: "/projects/5star.jpg",
             tag: "[03] 5 STAR",
+        },
+        {
+            id: "casamezcal",
+            num: "04",
+            category: "CLIENT",
+            title: "Casa Mezcal",
+            rolePill: t("proj.common.web"),
+            roleMeta: t("proj.casamezcal.roleMeta"),
+            listMeta: t("proj.casamezcal.listMeta"),
+            description: t("proj.casamezcal.desc"),
+            tags: ["Astro", "Responsive", "SEO"],
+            href: getLocalizedPath("/projects/casamezcal"),
+            visit: { label: "casamezcalalpine.com", url: "https://casamezcalalpine.com" },
+            comingSoon: false,
+            image: "/projects/casamezcal.jpg",
+            tag: "[04] CASA MEZCAL",
         },
     ];
